@@ -1,0 +1,3978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>CoopSense — Smart Hen Farm OS</title>
+  <meta name="theme-color" content="#234E35" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%20width=%22100%22%20height=%22100%22><text y=%22.9em%22 font-size=%2290%22>🐔</text></svg>">
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════════════════
+       NEUMORPHIC SOFT TACTILE DESIGN SYSTEM (COOPO-OS v4.0)
+       Inspired by Minimalist Industrial Audio / Braun / Dieter Rams Aesthetic
+       ═══════════════════════════════════════════════════════════════════════ */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --bg: #EAECEF;
+      --surface: #EAECEF;
+      --surface-light: #F2F4F7;
+      --shadow-light: #FFFFFF;
+      --shadow-dark: #CFD2D7;
+      --neu-flat: 10px 10px 22px #cfd2d7, -10px -10px 22px #ffffff;
+      --neu-flat-sm: 5px 5px 12px #cfd2d7, -5px -5px 12px #ffffff;
+      --neu-flat-xs: 3px 3px 7px #cfd2d7, -3px -3px 7px #ffffff;
+      --neu-inset: inset 4px 4px 8px #cfd2d7, inset -4px -4px 8px #ffffff;
+      --neu-inset-sm: inset 2.5px 2.5px 5px #cfd2d7, inset -2.5px -2.5px 5px #ffffff;
+      --neu-concave: inset 6px 6px 14px #cfd2d7, inset -6px -6px 14px #ffffff;
+      --text: #2B2D42;
+      --text-muted: #8E95A5;
+      --slate: #2B2D42;
+      --muted: #8E95A5;
+      --moss: #2E5A44;
+      --moss-dark: #1E3E2E;
+      --moss-light: #E7EFEB;
+      --terracotta: #C53030;
+      --yolk: #D97706;
+      --yolk-dark: #B45309;
+      --border: rgba(0, 0, 0, 0.08);
+      --border-subtle: rgba(255, 255, 255, 0.65);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    }
+    
+    body.dark-mode {
+      background-color: #0F1012;
+      --bg: #16181B;
+      --surface: #1E2024;
+      --surface-light: #282B30;
+      --shadow-light: #26292E;
+      --shadow-dark: #101113;
+      --neu-flat: 8px 8px 18px #101113, -8px -8px 18px #26292e;
+      --neu-flat-sm: 4px 4px 10px #101113, -4px -4px 10px #26292e;
+      --neu-flat-xs: 2px 2px 6px #101113, -2px -2px 6px #26292e;
+      --neu-inset: inset 3px 3px 6px #101113, inset -3px -3px 6px #26292e;
+      --neu-inset-sm: inset 2px 2px 4px #101113, inset -2px -2px 4px #26292e;
+      --neu-concave: inset 5px 5px 12px #101113, inset -5px -5px 12px #26292e;
+      --text: #F1F5F9;
+      --text-muted: #94A3B8;
+      --slate: #F1F5F9;
+      --muted: #94A3B8;
+      --moss: #48BB78;
+      --moss-dark: #38A169;
+      --moss-light: rgba(72, 187, 120, 0.15);
+      --terracotta: #F87171;
+      --yolk: #FBBF24;
+      --yolk-dark: #F59E0B;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+    }
+    body.dark-mode {
+      background-color: #121316;
+    }
+    body.dark-mode .app-shell {
+      box-shadow: 18px 18px 36px #0b0c0d, -18px -18px 36px #202227;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    body.dark-mode .neu-hero-card {
+      box-shadow: 12px 12px 26px #101113, -12px -12px 26px #26292e;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    body.dark-mode nav.bottom-nav {
+      box-shadow: 8px 8px 20px #0b0c0d, -8px -8px 20px #202227;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    body.dark-mode .input-box {
+      background: #18191D;
+      color: #F1F5F9;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    body.dark-mode .neu-circle-icon-btn,
+    body.dark-mode .neu-flock-badge,
+    body.dark-mode .badge-autopilot {
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    
+    /* Blinking LED Indicator */
+    .led-blinking {
+      width: 7.5px;
+      height: 7.5px;
+      border-radius: 50%;
+      display: inline-block;
+      animation: ledBlink 1.4s infinite ease-in-out;
+    }
+    .led-blinking.online {
+      background: #10B981;
+      box-shadow: 0 0 6px #10B981;
+    }
+    .led-blinking.offline {
+      background: #EF4444;
+      box-shadow: 0 0 6px #EF4444;
+    }
+    @keyframes ledBlink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.85); }
+    }
+    
+    .btn-outline {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      box-shadow: var(--neu-flat-xs);
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.15s ease;
+    }
+    .btn-outline:active {
+      box-shadow: var(--neu-inset-sm);
+    }
+    
+    body {
+      background-color: #E2E4E8;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Noto Sans Malayalam", "Manjari", "Gayathri", Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      padding: 16px 8px 30px;
+    }
+    
+    .app-shell {
+      width: 100%;
+      max-width: 440px;
+      min-height: calc(100vh - 32px);
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      border-radius: 40px;
+      box-shadow: 18px 18px 36px #cbced4, -18px -18px 36px #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      padding: 22px 18px 110px;
+    }
+    
+    /* Top Minimal Header */
+    header {
+      padding: 4px 6px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: transparent;
+    }
+    .brand-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: -0.4px;
+    }
+    .brand-sub {
+      font-size: 10px;
+      color: var(--text-muted);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 1px;
+    }
+    .badge-autopilot {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 10.5px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--neu-flat-sm);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      transition: all 0.2s ease;
+    }
+    .badge-autopilot:active {
+      box-shadow: var(--neu-inset-sm);
+    }
+    .badge-autopilot.manual {
+      color: var(--terracotta);
+    }
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--moss);
+      display: inline-block;
+    }
+    .dot.pulse {
+      animation: pulse 1.8s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.15); }
+      100% { opacity: 0.4; transform: scale(0.9); }
+    }
+
+    .content-area {
+      padding: 6px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+
+    /* Soft Neumorphic Card Containers */
+    .card {
+      background: var(--surface);
+      border-radius: 28px;
+      padding: 18px 20px;
+      box-shadow: var(--neu-flat);
+      border: 1px solid var(--border-subtle);
+      position: relative;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 800;
+      color: var(--text-muted);
+    }
+
+    /* ── SIGNATURE HERO CARD (MATCHING THE UPLOADED REFERENCE) ── */
+    .neu-hero-card {
+      padding: 22px 20px 20px;
+      border-radius: 34px;
+      box-shadow: 12px 12px 26px #cbced4, -12px -12px 26px #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+    .neu-hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+    .neu-time-block {
+      display: flex;
+      flex-direction: column;
+    }
+    .neu-big-date {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text);
+      line-height: 1.1;
+    }
+    .neu-big-time {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      color: var(--text);
+      margin-top: 1px;
+    }
+    .neu-flock-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--surface);
+      box-shadow: var(--neu-flat-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+    
+    /* Sub-pill widget inside Hero Card */
+    .neu-status-pill {
+      background: var(--surface);
+      box-shadow: var(--neu-inset);
+      border-radius: 22px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .neu-circle-icon-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--surface);
+      box-shadow: var(--neu-flat-xs);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      cursor: pointer;
+      color: var(--text);
+      transition: all 0.15s ease;
+    }
+    .neu-circle-icon-btn:active {
+      box-shadow: var(--neu-inset-sm);
+    }
+
+    /* Grid inside Hero: Left Dial, Right Media + Peanut Button */
+    .neu-hero-grid {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 16px;
+      align-items: center;
+    }
+    .neu-dial-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .neu-dial {
+      width: 136px;
+      height: 136px;
+      border-radius: 50%;
+      background: var(--surface);
+      box-shadow: var(--neu-concave);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+    .dial-tick {
+      position: absolute;
+      background: #8E95A5;
+      opacity: 0.55;
+    }
+    .dial-tick-12 { top: 8px; left: 50%; transform: translateX(-50%); width: 2px; height: 8px; }
+    .dial-tick-6  { bottom: 8px; left: 50%; transform: translateX(-50%); width: 2px; height: 8px; }
+    .dial-tick-9  { left: 8px; top: 50%; transform: translateY(-50%); width: 8px; height: 2px; }
+    .dial-tick-3  { right: 8px; top: 50%; transform: translateY(-50%); width: 8px; height: 2px; }
+    .dial-hand-hour {
+      position: absolute;
+      width: 2.5px;
+      height: 26px;
+      background: var(--text);
+      border-radius: 2px;
+      top: 42px;
+      left: 50%;
+      transform-origin: bottom center;
+      transform: translateX(-50%) rotate(220deg);
+      transition: transform 0.5s ease;
+    }
+    .dial-hand-min {
+      position: absolute;
+      width: 1.5px;
+      height: 38px;
+      background: var(--text);
+      border-radius: 2px;
+      top: 30px;
+      left: 50%;
+      transform-origin: bottom center;
+      transform: translateX(-50%) rotate(40deg);
+      transition: transform 0.5s ease;
+    }
+    .dial-center-pin {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .dial-readout {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Right column inside hero */
+    .neu-right-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .neu-media-tile {
+      width: 100%;
+      height: 80px;
+      border-radius: 22px;
+      background: #1E293B;
+      box-shadow: var(--neu-flat-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #FFF;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+    .tile-heart {
+      font-size: 24px;
+    }
+    .tile-caption {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      margin-top: 2px;
+      color: #E2E8F0;
+    }
+
+    /* Tactile Peanut Control Button */
+    .neu-peanut {
+      display: inline-flex;
+      background: var(--surface);
+      border-radius: 30px;
+      padding: 4px;
+      box-shadow: var(--neu-flat-sm);
+      gap: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+    .neu-peanut-btn {
+      width: 44px;
+      height: 32px;
+      border-radius: 20px;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+    .neu-peanut-btn.active, .neu-peanut-btn:active {
+      background: var(--surface);
+      box-shadow: var(--neu-inset-sm);
+      color: var(--moss);
+    }
+
+    /* Tactile Pill Buttons & Switches */
+    button, .btn, .neu-btn, .nav-btn, a {
+      text-decoration: none !important;
+    }
+    .neu-btn {
+      padding: 10px 16px;
+      border-radius: 18px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      box-shadow: var(--neu-flat-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+    .neu-btn:active {
+      box-shadow: var(--neu-inset-sm);
+      transform: scale(0.98);
+    }
+    .neu-btn-danger {
+      color: var(--terracotta);
+    }
+
+    /* Soft Inset Minimal Segmented Toggle (For Settings Language) */
+    .neu-lang-segmented {
+      display: flex;
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 4px;
+      box-shadow: var(--neu-inset-sm);
+      gap: 4px;
+      width: 100%;
+    }
+    .neu-lang-btn {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 16px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .neu-lang-btn.active {
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 800;
+      box-shadow: var(--neu-flat-xs);
+    }
+
+    /* Micro Soft Toggle Pills & Rows */
+    .toggle-row, .neu-toggle-row {
+      display: flex !important;
+      flex-direction: row !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      padding: 11px 0 !important;
+      width: 100% !important;
+    }
+    .toggle-row + .toggle-row, .neu-toggle-row + .neu-toggle-row {
+      border-top: 1px solid rgba(0, 0, 0, 0.04) !important;
+    }
+    .toggle-pill {
+      width: 44px;
+      height: 24px;
+      background: var(--surface);
+      box-shadow: var(--neu-inset-sm);
+      border-radius: 20px;
+      padding: 2.5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+    .toggle-pill.on {
+      justify-content: flex-end;
+      background: rgba(72, 187, 120, 0.18);
+    }
+    body.dark-mode .toggle-pill.on {
+      background: rgba(72, 187, 120, 0.22);
+    }
+    .toggle-pill.off {
+      justify-content: flex-start;
+      background: #CBD5E1;
+      box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.15);
+    }
+    body.dark-mode .toggle-pill.off {
+      background: #333842;
+      box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.4);
+    }
+    .toggle-knob {
+      width: 19px;
+      height: 19px;
+      background: var(--surface);
+      border-radius: 50%;
+      box-shadow: var(--neu-flat-xs);
+      transition: all 0.2s ease;
+    }
+    .toggle-pill.off .toggle-knob {
+      background: #94A3B8;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    }
+    body.dark-mode .toggle-pill.off .toggle-knob {
+      background: #64748B;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+    }
+    .toggle-pill.on .toggle-knob {
+      background: var(--moss);
+      box-shadow: 0 0 6px rgba(72, 187, 120, 0.55);
+    }
+
+    /* Floating Island Bottom Navigation */
+    nav.bottom-nav {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 40px);
+      max-width: 400px;
+      background: var(--surface);
+      border-radius: 34px;
+      box-shadow: 10px 10px 24px #cbced4, -10px -10px 24px #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      display: flex;
+      justify-content: space-around;
+      padding: 7px 10px;
+      z-index: 100;
+    }
+    .nav-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 22px;
+      transition: all 0.2s ease;
+    }
+    .nav-btn.active {
+      color: var(--text);
+      font-weight: 800;
+      box-shadow: var(--neu-inset-sm);
+    }
+    .nav-btn .icon { font-size: 18px; }
+
+    /* Modals & Overlays */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(43, 45, 66, 0.4);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-sheet {
+      background: var(--surface);
+      border-radius: 32px;
+      width: 100%;
+      max-width: 380px;
+      padding: 24px;
+      box-shadow: 16px 16px 32px #b0b4bc, -16px -16px 32px #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      animation: modalSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalSlideUp {
+      from { transform: translateY(20px) scale(0.97); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    .input-box {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--surface);
+      box-shadow: var(--neu-inset-sm);
+      margin-top: 4px;
+    }
+    .input-box:focus {
+      outline: none;
+      box-shadow: var(--neu-inset);
+    }
+
+    /* Keypad PIN */
+    .keypad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .keypad-btn {
+      padding: 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      background: var(--surface);
+      box-shadow: var(--neu-flat-sm);
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.1s ease;
+    }
+    .keypad-btn:active {
+      box-shadow: var(--neu-inset-sm);
+      transform: scale(0.97);
+    }
+
+    /* Charts & Stats */
+    .bar-chart-container {
+      display: flex;
+      align-items: flex-end;
+      height: 100px;
+      gap: 10px;
+      padding: 10px 4px 6px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .bar {
+      width: 100%;
+      max-width: 22px;
+      background: var(--moss);
+      border-radius: 6px 6px 2px 2px;
+      box-shadow: var(--neu-flat-xs);
+      transition: height 0.3s;
+    }
+    .bar-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+    .bar-val {
+      font-size: 9px;
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+    .stat-pill {
+      background: var(--surface);
+      box-shadow: var(--neu-inset-sm);
+      border-radius: 16px;
+      padding: 8px 12px;
+    }
+
+    /* CCTV Camera Tiles */
+    .cctv-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .cctv-tile {
+      background: #1E293B;
+      color: #FFF;
+      border-radius: 22px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: var(--neu-flat-sm);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+    .cctv-preview {
+      height: 94px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      position: relative;
+    }
+    .live-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(220, 38, 38, 0.9);
+      color: white;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+    }
+    .cctv-info {
+      padding: 8px 12px;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    /* Buttons */
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .btn {
+      flex: 1;
+      padding: 11px 14px;
+      border-radius: 18px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      box-shadow: var(--neu-flat-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .btn:active {
+      box-shadow: var(--neu-inset-sm);
+      transform: scale(0.97);
+    }
+    .btn-moss { color: var(--moss); }
+    .btn-terracotta { color: var(--terracotta); }
+    .btn-disabled { opacity: 0.5; pointer-events: none; }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    
+    <!-- Top Header -->
+    <header>
+      <div>
+        <div class="brand-title">🐔 CoopSense</div>
+        <div class="brand-sub" id="esp-header-status" style="display:flex; align-items:center; gap:6px; margin-top:2px;">
+          <span class="led-blinking online" id="esp-led"></span>
+          <span id="esp-status-text" style="font-size:11px; font-weight:800; color:var(--moss);">Online</span>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="neu-circle-icon-btn" id="btn-theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+        <div id="btn-autopilot" class="badge-autopilot" onclick="toggleAutoMode()">
+          <span class="dot pulse" id="auto-dot"></span>
+          <span id="auto-text">AUTOPILOT ON</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ESP32 Sync Error / Status Banner -->
+    <div id="esp-sync-banner" style="display:none; background:#FEE2E2; color:#991B1B; font-size:11px; font-weight:700; text-align:center; padding:8px 14px; border-radius:18px; margin-bottom:10px; box-shadow:var(--neu-flat-xs);">
+      ⚠️ Settings not synced to controller — tap <strong>Save &amp; Sync</strong> in Settings.
+    </div>
+
+    <!-- Manual Override Control Strip (visible when AUTOPILOT is OFF) -->
+    <div id="autopilot-mode-strip" style="display:none; background:var(--surface); border-radius:24px; padding:12px 14px; flex-direction:column; gap:8px; box-shadow:var(--neu-inset-sm); margin-bottom:10px;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:6px; font-size:11px; font-weight:800; color:var(--terracotta);">
+          <span style="width:7px;height:7px;border-radius:50%;background:var(--terracotta);display:inline-block;"></span>
+          <span data-i18n="manual_strip_title">Manual Control Active</span>
+        </div>
+        <button class="neu-btn" onclick="toggleAutoMode()" data-i18n="resume_auto_btn" style="padding:4px 10px; font-size:10px;">Resume Auto</button>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(68px, 1fr)); gap:6px;" id="strip-btn-grid">
+        <button id="strip-btn-door" class="neu-btn" onclick="toggleDoorAction()" style="padding:7px 4px;font-size:10px;">🚪 Door</button>
+        <button id="strip-btn-feeder" class="neu-btn" onclick="toggleFeederAction()" style="padding:7px 4px;font-size:10px;">🌾 Feed</button>
+        <button id="strip-btn-l1" class="neu-btn" onclick="manualLight('in1')" style="padding:7px 4px;font-size:10px;">💡 L1</button>
+        <button id="strip-btn-l2" class="neu-btn" onclick="manualLight('in2')" style="padding:7px 4px;font-size:10px;">🪺 L2</button>
+        <button id="strip-btn-l3" class="neu-btn" onclick="manualLight('out')" style="padding:7px 4px;font-size:10px;">🔦 Yard</button>
+        <button id="strip-btn-manure" class="neu-btn" onclick="triggerTimedManure()" style="padding:7px 4px;font-size:10px;">♻️ Scrape</button>
+        <button id="strip-btn-fan" class="neu-btn" onclick="manualFan()" style="padding:7px 4px;font-size:10px;">🌀 Fan</button>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 1: HEN FARM DASHBOARD ==================== -->
+    <div class="content-area" id="tab-coop">
+
+      <!-- LIVE CLIMATE & FLOCK ENVELOPE -->
+      <div class="card" id="card-climate-hero">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="font-size:14px; color:var(--text);" data-i18n="climate_title">🌡️ Live Climate &amp; Flock</strong>
+          <span class="neu-flock-badge" style="width:auto; height:auto; padding:4px 10px; border-radius:14px; font-size:11px; font-weight:800;">
+            🐔 <span id="val-flock-count">0</span>
+          </span>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;">
+          <div style="background:var(--surface); box-shadow:var(--neu-inset-sm); border-radius:18px; padding:12px; text-align:center;">
+            <div style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Temperature</div>
+            <div id="val-temp" style="font-size:22px; font-weight:900; color:var(--text); margin-top:3px;">24.8°C</div>
+          </div>
+          <div style="background:var(--surface); box-shadow:var(--neu-inset-sm); border-radius:18px; padding:12px; text-align:center;">
+            <div style="font-size:10px; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Humidity</div>
+            <div id="val-humidity" style="font-size:22px; font-weight:900; color:var(--text); margin-top:3px;">62% RH</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. COOP DOOR -->
+      <div class="card" id="card-door">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="font-size:14px; color:var(--text);" id="lbl-door-title">🚪 Coop Door (Closed)</strong>
+          <div class="btn-row" style="margin-top:0;">
+            <button id="btn-open-door" class="neu-btn" onclick="triggerDoor('open')" style="padding:9px 18px; font-size:12px; font-weight:800;">Open Door</button>
+            <button id="btn-close-door" class="neu-btn neu-btn-danger" onclick="triggerDoor('close')" style="padding:9px 18px; font-size:12px; font-weight:800; display:none;">Close Door</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. FEEDER LID -->
+      <div class="card" id="card-feeder-lid">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="font-size:14px; color:var(--text);" id="lbl-feeder-title">🌾 Feeder Lid (Closed)</strong>
+          <div class="btn-row" style="margin-top:0;">
+            <button id="btn-feeder-open" class="neu-btn" onclick="controlFeederLid(true)" style="padding:9px 18px; font-size:12px; font-weight:800;">Open Lid</button>
+            <button id="btn-feeder-close" class="neu-btn neu-btn-danger" onclick="controlFeederLid(false)" style="padding:9px 18px; font-size:12px; font-weight:800; display:none;">Close Lid</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. ZONE LIGHTING BANK -->
+      <div class="card" id="card-lights">
+        <div style="margin-bottom:10px;">
+          <strong style="font-size:14px; color:var(--text);" data-i18n="lights_title">💡 Zone Lighting Bank</strong>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <!-- L1: Roosting Perch -->
+          <div class="neu-toggle-row">
+            <span style="font-size:12px; font-weight:700;" data-i18n="lights_l1_name">L1: Roosting Perch</span>
+            <div class="toggle-pill off" id="toggle-light-in1" onclick="toggleLight('in1')" style="cursor:pointer;"><div class="toggle-knob"></div></div>
+          </div>
+          <!-- L2: Nesting Bay -->
+          <div class="neu-toggle-row">
+            <span style="font-size:12px; font-weight:700;" data-i18n="lights_l2_name">L2: Nesting Bay</span>
+            <div class="toggle-pill off" id="toggle-light-in2" onclick="toggleLight('in2')" style="cursor:pointer;"><div class="toggle-knob"></div></div>
+          </div>
+          <!-- L3: Yard Security -->
+          <div class="neu-toggle-row">
+            <span style="font-size:12px; font-weight:700;" data-i18n="lights_l3_name">L3: Yard Security</span>
+            <div class="toggle-pill off" id="toggle-light-out" onclick="toggleLight('out')" style="cursor:pointer;"><div class="toggle-knob"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. CLIMATE EXHAUST FAN -->
+      <div class="card" id="card-fan-widget">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="font-size:13.5px; color:var(--text);" data-i18n="fan_title">💨 Climate Exhaust Fan</strong>
+          <div class="toggle-pill off" id="toggle-fan" onclick="toggleActuator('fan')" style="cursor:pointer;">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. CHICK BROODER HEATER -->
+      <div class="card" id="card-chick">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="font-size:13.5px; color:var(--text);" data-i18n="chick_title">🐥 Chick Brooder</strong>
+          <div class="toggle-pill off" id="toggle-chick-pill" onclick="toggleChickHeat()" style="cursor:pointer;">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. PREDATOR NIGHT GUARD -->
+      <div class="card" id="card-predator-guard">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="font-size:13.5px; color:var(--text);" data-i18n="predator_title">🛡️ Perimeter Guard</strong>
+          <div class="toggle-pill on" id="toggle-predator-pill" onclick="togglePredatorGuard()" style="cursor:pointer;">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. CLEANING ROLLER SCRAPER (Moved near Azolla) -->
+      <div class="card" id="card-manure-roller">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="font-size:14px; color:var(--text);" data-i18n="manure_title">🧹 Cleaning Roller</strong>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <span id="manure-countdown-box" style="display:none; font-size:11px; font-weight:800; color:var(--moss);">
+              ⏱️ <span id="lbl-manure-countdown">30</span>s
+            </span>
+            <button id="btn-run-manure" class="neu-btn" onclick="triggerTimedManure()" style="padding:9px 16px; font-size:12px; font-weight:800;" data-i18n="btn_run">▶ Run</button>
+            <button id="btn-stop-manure" class="neu-btn neu-btn-danger" style="display:none; padding:9px 16px; font-size:12px; font-weight:800;" onclick="abortManureRoller()" data-i18n="btn_stop">⏹ Stop</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. AZOLLA BIOMASS CULTIVATION & SKIMMER -->
+      <div class="card" id="card-azolla-widget" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="font-size:14px; color:var(--text);" data-i18n="azolla_title">🌿 Azolla Harvester</strong>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <span id="azolla-countdown-box" style="display:none; font-size:11px; font-weight:800; color:var(--moss);">
+              ⏱️ <span id="lbl-azolla-countdown">90</span>s
+            </span>
+            <button id="btn-run-azolla" class="neu-btn" onclick="triggerAzollaHarvest()" style="padding:9px 16px; font-size:12px; font-weight:800;" data-i18n="btn_run">▶ Run</button>
+            <button id="btn-stop-azolla" class="neu-btn neu-btn-danger" style="display:none; padding:9px 16px; font-size:12px; font-weight:800;" onclick="abortAzollaHarvest()" data-i18n="btn_stop">⏹ Stop</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. DAILY EGG HARVEST LOGGER -->
+      <div class="card" id="card-egg-harvest" style="display:flex; justify-content:space-between; align-items:center;">
+        <strong style="font-size:13px; color:var(--text);" data-i18n="eggs_title">🥚 Today's Egg Harvest</strong>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button class="neu-circle-icon-btn" onclick="changeEggs(-1)" style="font-size:16px;">−</button>
+          <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" id="input-eggs" value="0" oninput="setEggs(this.value.replace(/[^0-9]/g,''))" onchange="setEggs(this.value.replace(/[^0-9]/g,''))" onkeyup="setEggs(this.value.replace(/[^0-9]/g,''))" style="width:86px; height:36px; text-align:center; font-size:15px; font-weight:900; color:var(--text); background:var(--surface); border:1px solid rgba(255,255,255,0.7); box-shadow:var(--neu-inset-sm); border-radius:14px; outline:none; margin:0; padding:2px 6px;" />
+          <button class="neu-circle-icon-btn" onclick="changeEggs(1)" style="font-size:16px;">＋</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== TAB 2: FINANCES & PRODUCTION TRACKER ==================== -->
+    <div class="content-area" id="tab-analytics" style="display:none;">
+      
+      <!-- Financial View Mode Switcher -->
+      <div class="neu-lang-segmented" style="margin-bottom:2px;">
+        <button id="btn-view-monthly" class="neu-lang-btn active" onclick="switchFinanceView('monthly')" data-i18n="fin_view_monthly">
+          Monthly
+        </button>
+        <button id="btn-view-overall" class="neu-lang-btn" onclick="switchFinanceView('overall')" data-i18n="fin_view_overall">
+          Overall
+        </button>
+      </div>
+
+      <!-- VIEW 1: MONTHLY OPERATING LEDGER (FIRST VIEW BY DEFAULT) -->
+      <div id="view-monthly-finances" style="display:flex; flex-direction:column; gap:14px;">
+        <!-- Monthly Financial Balance Card -->
+        <div class="card">
+          <div class="card-title" data-i18n="fin_balance_title">Monthly Operating Balance (₹ INR)</div>
+          <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:6px;">
+            <div>
+              <span style="font-size:11px; color:var(--text-muted); font-weight:700;" data-i18n="fin_cashflow_lbl">Net Monthly Cash Flow</span>
+              <div style="font-size:26px; font-weight:900; color:var(--moss);" id="val-net-profit">₹0</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:11px; color:var(--moss); font-weight:800;"><span data-i18n="fin_inc_lbl">Income: </span><span id="val-total-inc">₹0</span></div>
+              <div style="font-size:11px; color:var(--terracotta); font-weight:800;"><span data-i18n="fin_exp_lbl">Expenses: </span><span id="val-total-exp">₹0</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Monthly Egg Production Overview Card -->
+        <div class="card" id="card-monthly-egg-stats">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="card-title" data-i18n="fin_egg_overview_title" style="margin-bottom:0;">Egg Production</div>
+            <span id="badge-lay-rate" style="font-size:11px; background:var(--moss-light); color:var(--moss); font-weight:800; padding:4px 8px; border-radius:12px;">
+              0% Lay Rate
+            </span>
+          </div>
+
+          <div class="bar-chart-container" style="margin-top:10px;">
+            <div class="bar-col">
+              <span class="bar-val" id="bar-val-w1">0</span>
+              <div class="bar" id="bar-el-w1" style="height: 0%;"></div>
+              <span class="bar-label" data-i18n="fin_w1">W1</span>
+            </div>
+            <div class="bar-col">
+              <span class="bar-val" id="bar-val-w2">0</span>
+              <div class="bar" id="bar-el-w2" style="height: 0%;"></div>
+              <span class="bar-label" data-i18n="fin_w2">W2</span>
+            </div>
+            <div class="bar-col">
+              <span class="bar-val" id="bar-val-w3">0</span>
+              <div class="bar" id="bar-el-w3" style="height: 0%;"></div>
+              <span class="bar-label" data-i18n="fin_w3">W3</span>
+            </div>
+            <div class="bar-col">
+              <span class="bar-val" id="bar-val-w4">0</span>
+              <div class="bar" id="bar-el-w4" style="height: 0%;"></div>
+              <span class="bar-label" data-i18n="fin_w4">W4</span>
+            </div>
+            <div class="bar-col">
+              <span class="bar-val" id="bar-val-today" style="color:var(--yolk-dark);">0</span>
+              <div class="bar" id="bar-el-today" style="height: 0%; background:var(--moss);"></div>
+              <span class="bar-label" data-i18n="fin_today_eggs">Today</span>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:12px;">
+            <div class="stat-pill">
+              <div style="font-size:10px; color:var(--text-muted);" data-i18n="fin_total_eggs">Total Month Eggs</div>
+              <strong style="font-size:14px; color:var(--text);" id="stat-month-eggs">0</strong>
+            </div>
+            <div class="stat-pill">
+              <div style="font-size:10px; color:var(--text-muted);" data-i18n="fin_avg_lay_rate">Daily Avg</div>
+              <strong style="font-size:14px; color:var(--text);" id="stat-daily-avg">0</strong>
+            </div>
+            <div class="stat-pill">
+              <div style="font-size:10px; color:var(--text-muted);" data-i18n="fin_active_flock">Active Flock</div>
+              <strong style="font-size:14px; color:var(--text);" id="stat-flock-hens">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERACTIVE TRANSACTION LEDGER & EXPENSE TRACKER (Inside Monthly View only) -->
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div>
+              <div class="card-title" style="margin-bottom:0;" data-i18n="fin_ledger_title">📖 Farm Ledger &amp; Transactions</div>
+              <div style="font-size:10px; color:var(--text-muted); margin-top:2px;" data-i18n="fin_ledger_sub">Logged operational sales and costs</div>
+            </div>
+            <button class="neu-btn" style="padding:7px 12px; font-size:11px;" onclick="openTxModal()" data-i18n="fin_btn_log">
+              ＋ Log
+            </button>
+          </div>
+
+          <div style="display:flex; gap:6px; margin:10px 0;">
+            <button id="filter-tx-all" onclick="filterTransactions('all')" class="neu-btn" style="padding:5px 12px; font-size:11px;" data-i18n="fin_filter_all">All</button>
+            <button id="filter-tx-inc" onclick="filterTransactions('income')" class="neu-btn" style="padding:5px 12px; font-size:11px; color:var(--moss);" data-i18n="fin_filter_inc">🟢 Income</button>
+            <button id="filter-tx-exp" onclick="filterTransactions('expense')" class="neu-btn" style="padding:5px 12px; font-size:11px; color:var(--terracotta);" data-i18n="fin_filter_exp">🔴 Expense</button>
+          </div>
+
+          <div id="tx-history-list" style="display:flex; flex-direction:column; gap:8px; max-height:340px; overflow-y:auto; padding-right:2px;">
+            <!-- Dynamically populated by renderTransactions() -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- VIEW 2: OVERALL CUMULATIVE FINANCES (SECONDARY VIEW) -->
+      <div id="view-overall-finances" style="display:none; flex-direction:column; gap:14px;">
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <span style="font-size:10.5px; text-transform:uppercase; letter-spacing:0.8px; color:var(--moss); font-weight:800;" data-i18n="fin_overall_profit_lbl">Cumulative Net Farm Profit</span>
+              <div style="font-size:26px; font-weight:900; color:var(--text); margin-top:2px;" id="val-overall-net">₹0</div>
+            </div>
+            <span id="badge-overall-roi" style="background:var(--moss-light); font-size:11px; font-weight:800; padding:4px 10px; border-radius:12px; color:var(--text-muted);">
+              ROI: 0%
+            </span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:14px; padding-top:12px; border-top:1px solid var(--border);">
+            <div>
+              <div style="font-size:10px; color:var(--text-muted);" data-i18n="fin_gross_revenue">Gross Revenue</div>
+              <div style="font-size:13px; font-weight:800; color:var(--moss);" id="life-revenue">₹0</div>
+            </div>
+            <div>
+              <div style="font-size:10px; color:var(--text-muted);" data-i18n="fin_capex">CapEx (Setup)</div>
+              <div style="font-size:13px; font-weight:800; color:var(--text);" id="life-capex">₹0</div>
+            </div>
+            <div>
+              <div style="font-size:10px; color:var(--text-muted);" data-i18n="fin_opex">OpEx (Running)</div>
+              <div style="font-size:13px; font-weight:800; color:var(--terracotta);" id="life-cost">₹0</div>
+            </div>
+          </div>
+
+          <div style="margin-top:14px; padding-top:10px; border-top:1px solid var(--border);">
+            <div style="display:flex; justify-content:space-between; font-size:10.5px; color:var(--text-muted); margin-bottom:4px;">
+              <span data-i18n="fin_capital_recovery">Capital Recovery</span>
+              <strong style="color:var(--moss);" id="lbl-breakeven-pct">0% Recovered</strong>
+            </div>
+            <div style="width:100%; height:7px; background:var(--surface); box-shadow:var(--neu-inset-sm); border-radius:10px; overflow:hidden;">
+              <div id="bar-breakeven" style="width:0%; height:100%; background:var(--moss); border-radius:10px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overall Cumulative Egg Production Card -->
+        <div class="card" id="card-overall-egg-stats">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div class="card-title" style="margin-bottom:0;" data-i18n="fin_overall_eggs_title">🥚 Overall Egg Production</div>
+            <span id="badge-overall-lay-rate" style="font-size:11px; background:var(--moss-light); color:var(--moss); font-weight:800; padding:4px 8px; border-radius:12px;">
+              0% All-Time Avg
+            </span>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:10px;">
+            <div>
+              <div style="font-size:10px; color:var(--text-muted); font-weight:700; text-transform:uppercase;" data-i18n="fin_lifetime_eggs">Lifetime Eggs Collected</div>
+              <div style="font-size:26px; font-weight:900; color:var(--moss);" id="val-overall-lifetime-eggs">0</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:10px; color:var(--text-muted); font-weight:700; text-transform:uppercase;" data-i18n="fin_standard_trays">Standard Trays (30s)</div>
+              <div style="font-size:18px; font-weight:900; color:var(--text);" id="val-overall-trays">0 Trays</div>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-top:12px;">
+            <div class="stat-pill">
+              <div style="font-size:10px; color:var(--text-muted);" data-i18n="fin_min_daily_lay">Min Daily Lay</div>
+              <strong style="font-size:13px; color:var(--text);" id="stat-overall-min-lay">0 Egg</strong>
+            </div>
+            <div class="stat-pill">
+              <div style="font-size:10px; color:var(--text-muted);" data-i18n="fin_max_daily_lay">Max Daily Lay</div>
+              <strong style="font-size:13px; color:var(--moss);" id="stat-overall-max-lay">0 Egg</strong>
+            </div>
+            <div class="stat-pill">
+              <div style="font-size:10px; color:var(--text-muted);" data-i18n="fin_flock_capacity">Flock Capacity</div>
+              <strong style="font-size:13px; color:var(--text);" id="stat-overall-flock-hens">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title" data-i18n="fin_cost_breakdown_title">Cumulative Cost Breakdown (₹)</div>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
+            <div style="display:flex; justify-content:space-between; font-size:12px; padding-bottom:6px; border-bottom:1px solid var(--border);">
+              <span data-i18n="fin_cost_build">🏗️ Automated Coop Build &amp; DIY Hardware (CapEx)</span>
+              <strong style="color:var(--text);" id="cost-build-capex">₹0</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; padding-bottom:6px; border-bottom:1px solid var(--border);">
+              <span data-i18n="fin_cost_chicks">🐥 Starter Chick Flock Purchase (CapEx)</span>
+              <strong style="color:var(--text);" id="cost-chick-capex">₹0</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; padding-bottom:6px; border-bottom:1px solid var(--border);">
+              <span data-i18n="fin_cost_feed">🌾 Layer Mash, Grains &amp; Supplements (OpEx)</span>
+              <strong style="color:var(--terracotta);" id="cost-feed-total">₹0</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; padding-bottom:6px; border-bottom:1px solid var(--border);">
+              <span data-i18n="fin_cost_bedding">🪵 Pine Bedding &amp; Sanitizers (OpEx)</span>
+              <strong style="color:var(--terracotta);" id="cost-bedding-total">₹0</strong>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:12px;">
+              <span data-i18n="fin_cost_power">💡 Electricity (Brooder SSR, Fan, Lights) (OpEx)</span>
+              <strong style="color:var(--terracotta);" id="cost-power-total">₹0</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== TAB 3: CCTV LIVE FEEDS ==================== -->
+    <div class="content-area" id="tab-cctv" style="display:none;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:0 4px;">
+        <strong style="font-size:14px; color:var(--text);" data-i18n="cctv_title">Coop CCTV Feeds</strong>
+        <span style="font-size:10px; background:var(--moss-light); color:var(--moss); padding:4px 10px; border-radius:12px; font-weight:800;" data-i18n="cctv_active_badge">4 Cameras Active</span>
+      </div>
+
+      <div class="cctv-grid">
+        <div class="cctv-tile" onclick="openCam('Indoor Roost & Perch')">
+          <div class="cctv-preview" style="background:#1E293B url('coop_realistic_interior.jpg') center/cover no-repeat;">
+            <div class="live-badge" data-i18n="cctv_live_badge">● LIVE</div>
+            <span style="font-size:28px; opacity:0.85;">🐔</span>
+          </div>
+          <div class="cctv-info">
+            <div style="font-size:11.5px; font-weight:800; color:var(--text);" data-i18n="cctv_cam1_name">CAM 1: Roost Perch</div>
+          </div>
+        </div>
+
+        <div class="cctv-tile" onclick="openCam('Nesting Boxes')">
+          <div class="cctv-preview" style="background:#1E293B url('coop_architecture_assembly.jpg') center/cover no-repeat;">
+            <div class="live-badge" data-i18n="cctv_live_badge">● LIVE</div>
+            <span style="font-size:28px; opacity:0.85;">🪺</span>
+          </div>
+          <div class="cctv-info">
+            <div style="font-size:11.5px; font-weight:800; color:var(--text);" data-i18n="cctv_cam2_name">CAM 2: Nesting Bay</div>
+          </div>
+        </div>
+
+        <div class="cctv-tile" onclick="openCam('Outdoor Run & Feeder')">
+          <div class="cctv-preview" style="background:#1E293B url('coop_realistic_exterior.jpg') center/cover no-repeat;">
+            <div class="live-badge" data-i18n="cctv_live_badge">● LIVE</div>
+            <span style="font-size:28px; opacity:0.85;">🌾</span>
+          </div>
+          <div class="cctv-info">
+            <div style="font-size:11.5px; font-weight:800; color:var(--text);" data-i18n="cctv_cam3_name">CAM 3: Run &amp; Feeder</div>
+          </div>
+        </div>
+
+        <div class="cctv-tile" onclick="openCam('Predator Perimeter')">
+          <div class="cctv-preview" style="background:#1E293B url('coop_physical_installation.jpg') center/cover no-repeat;">
+            <div class="live-badge" data-i18n="cctv_live_badge">● LIVE</div>
+            <span style="font-size:28px; opacity:0.85;">🦊</span>
+          </div>
+          <div class="cctv-info">
+            <div style="font-size:11.5px; font-weight:800; color:var(--text);" data-i18n="cctv_cam4_name">CAM 4: Perimeter Yard</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 4: SETTINGS & PARAMETERS ==================== -->
+    <div class="content-area" id="tab-settings" style="display:none;">
+      
+      <!-- Settings Header -->
+      <div style="padding:0 4px; margin-bottom:4px;">
+        <strong style="font-size:15px; color:var(--text);">System Configuration</strong>
+      </div>
+
+      <!-- SECTION 0: LANGUAGE PREFERENCE (PER-DEVICE / PER-USER INDEPENDENT) -->
+      <div class="card" id="card-settings-language">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div style="font-size:12px; font-weight:800; color:var(--text);">Interface Language</div>
+          <span style="font-size:14px;">🌐</span>
+        </div>
+        <div class="neu-lang-segmented">
+          <button type="button" id="lang-btn-en" class="neu-lang-btn active" onclick="setLanguage('en')">English</button>
+          <button type="button" id="lang-btn-ml" class="neu-lang-btn" onclick="setLanguage('ml')">മലയാളം</button>
+        </div>
+      </div>
+
+      <!-- SECTION 1: UNIVERSAL SYSTEM-WIDE FEATURE FLAGS (Requirements 3 & 6) -->
+      <div class="card" id="card-settings-features">
+        <div class="card-title">🧩 Hardware Subsystems &amp; Feature Flags</div>
+
+        <div style="display:flex; flex-direction:column; gap:4px; margin-top:12px;">
+          <!-- 1. Motorized Door Feature -->
+          <div class="toggle-row">
+            <span style="font-size:13px; font-weight:800; color:var(--text);">🚪 Motorized Coop Door</span>
+            <div class="toggle-pill on" id="feat-toggle-door" onclick="toggleFeature('door')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+
+          <!-- 2. Egg Harvest Tracker Feature -->
+          <div class="toggle-row">
+            <span style="font-size:13px; font-weight:800; color:var(--text);">🥚 Daily Egg Harvest Tracker</span>
+            <div class="toggle-pill on" id="feat-toggle-egg_tracker" onclick="toggleFeature('egg_tracker')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+
+          <!-- 3. Gravity Feeder Lid Feature -->
+          <div class="toggle-row">
+            <span style="font-size:13px; font-weight:800; color:var(--text);">🌾 Gravity Feeder Servo Lid</span>
+            <div class="toggle-pill on" id="feat-toggle-feeder" onclick="toggleFeature('feeder')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+
+          <!-- 4. Photoperiod Lighting Feature -->
+          <div class="toggle-row">
+            <span style="font-size:13px; font-weight:800; color:var(--text);">💡 Photoperiod Lighting Bank</span>
+            <div class="toggle-pill on" id="feat-toggle-lights" onclick="toggleFeature('lights')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+
+          <!-- 5. Manure Roller Scraper Feature -->
+          <div class="toggle-row">
+            <span style="font-size:13px; font-weight:800; color:var(--text);">♻️ Manure Roller Scraper</span>
+            <div class="toggle-pill on" id="feat-toggle-manure" onclick="toggleFeature('manure')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+
+          <!-- 6. Exhaust Fan Feature -->
+          <div class="toggle-row">
+            <span style="font-size:13px; font-weight:800; color:var(--text);">🌀 Climate Exhaust Fan</span>
+            <div class="toggle-pill on" id="feat-toggle-fan" onclick="toggleFeature('fan')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+
+          <!-- 7. Chick Brooder Heater Feature -->
+          <div class="toggle-row">
+            <span style="font-size:13px; font-weight:800; color:var(--text);">🐥 Chick Brooder Heater</span>
+            <div class="toggle-pill on" id="feat-toggle-heater" onclick="toggleFeature('heater')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+
+          <!-- 8. Predator Guard Feature -->
+          <div class="toggle-row">
+            <span style="font-size:13px; font-weight:800; color:var(--text);">🦊 Predator Night Guard</span>
+            <div class="toggle-pill on" id="feat-toggle-predator" onclick="toggleFeature('predator')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+
+          <!-- 9. CCTV Feeds Feature -->
+          <div class="toggle-row">
+            <span style="font-size:13px; font-weight:800; color:var(--text);">📹 CCTV Camera Stream Feeds</span>
+            <div class="toggle-pill on" id="feat-toggle-cctv" onclick="toggleFeature('cctv')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+
+          <!-- 10. Azolla Cultivation Feature (Default OFF) -->
+          <div class="toggle-row">
+            <span style="font-size:13px; font-weight:800; color:var(--text);">🌿 Azolla Cultivation &amp; Skimmer</span>
+            <div class="toggle-pill off" id="feat-toggle-azolla" onclick="toggleFeature('azolla')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: AUTOPILOT SUBSYSTEM MANAGEMENT MATRIX (Requirement 9) -->
+      <div class="card" id="card-settings-autopilot">
+        <div class="card-title">🤖 Autopilot Automation Matrix</div>
+
+        <div style="display:flex; flex-direction:column; gap:4px; margin-top:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12.5px; font-weight:700; cursor:default;" id="matrix-wrap-door">
+            <span>🚪 Automated Door Scheduling</span>
+            <input type="checkbox" id="matrix-auto-door" checked onchange="saveAutopilotMatrix()" style="width:18px; height:18px; accent-color:var(--moss); cursor:pointer;" />
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12.5px; font-weight:700; cursor:default;" id="matrix-wrap-lights">
+            <span>💡 Automated Photoperiod Timers</span>
+            <input type="checkbox" id="matrix-auto-lights" checked onchange="saveAutopilotMatrix()" style="width:18px; height:18px; accent-color:var(--moss); cursor:pointer;" />
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12.5px; font-weight:700; cursor:default;" id="matrix-wrap-feeder">
+            <span>🌾 Gravity Feeder Multi-Slot Timing</span>
+            <input type="checkbox" id="matrix-auto-feeder" checked onchange="saveAutopilotMatrix()" style="width:18px; height:18px; accent-color:var(--moss); cursor:pointer;" />
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12.5px; font-weight:700; cursor:default;" id="matrix-wrap-fan">
+            <span>🌀 Exhaust Fan Climate Banding</span>
+            <input type="checkbox" id="matrix-auto-fan" checked onchange="saveAutopilotMatrix()" style="width:18px; height:18px; accent-color:var(--moss); cursor:pointer;" />
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12.5px; font-weight:700; cursor:default;" id="matrix-wrap-heater">
+            <span>🐥 Brooder Temperature Regulation</span>
+            <input type="checkbox" id="matrix-auto-heater" checked onchange="saveAutopilotMatrix()" style="width:18px; height:18px; accent-color:var(--moss); cursor:pointer;" />
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12.5px; font-weight:700; cursor:default;" id="matrix-wrap-predator">
+            <span>🦊 Predator Guard Dusk-to-Dawn</span>
+            <input type="checkbox" id="matrix-auto-predator" checked onchange="saveAutopilotMatrix()" style="width:18px; height:18px; accent-color:var(--moss); cursor:pointer;" />
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12.5px; font-weight:700; cursor:default;" id="matrix-wrap-manure">
+            <span>♻️ Scheduled Manure Scrape</span>
+            <input type="checkbox" id="matrix-auto-manure" checked onchange="saveAutopilotMatrix()" style="width:18px; height:18px; accent-color:var(--moss); cursor:pointer;" />
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 0; font-size:12.5px; font-weight:700; cursor:default;" id="matrix-wrap-azolla">
+            <span>🌿 Azolla Daily Skimming</span>
+            <input type="checkbox" id="matrix-auto-azolla" onchange="saveAutopilotMatrix()" style="width:18px; height:18px; accent-color:var(--moss); cursor:pointer;" />
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: FLOCK SIZE & PRODUCTION TRACKING -->
+      <div class="card" id="card-settings-flock">
+        <div class="card-title">Flock Size &amp; Lay Rate Tracking</div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; background:var(--surface); border:1px solid var(--border-subtle); box-shadow:var(--neu-inset-sm); border-radius:18px; padding:12px 14px;">
+          <div>
+            <div style="font-size:13px; font-weight:800; color:var(--text);">Total Layer Hens</div>
+            <div style="font-size:10px; color:var(--text-muted);" id="lbl-flock-count">0</div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button type="button" class="neu-circle-icon-btn" onclick="changeFlockCount(-1)">−</button>
+            <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="5" id="cfg-hen-count" value="0" oninput="updateFlockCount(this.value.replace(/[^0-9]/g,''))" onchange="updateFlockCount(this.value.replace(/[^0-9]/g,''))" onkeyup="updateFlockCount(this.value.replace(/[^0-9]/g,''))" class="input-box" style="width:86px; height:36px; text-align:center; font-size:15px; font-weight:900; padding:2px 6px; margin:0;" />
+            <button type="button" class="neu-circle-icon-btn" onclick="changeFlockCount(1)">＋</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: DOOR TIMERS -->
+      <div class="card" id="card-settings-door">
+        <div class="card-title">Door Schedule Timers</div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px;">
+          <div>
+            <label style="font-size:11px; font-weight:700; color:var(--text);">🌅 Morning Open</label>
+            <input type="time" id="cfg-door-open" class="input-box" value="06:15" onchange="markSettingsDirty()" />
+          </div>
+          <div>
+            <label style="font-size:11px; font-weight:700; color:var(--text);">🌇 Evening Close</label>
+            <input type="time" id="cfg-door-close" class="input-box" value="18:45" onchange="markSettingsDirty()" />
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: LIGHTING SCHEDULE -->
+      <div class="card" id="card-settings-lights">
+        <div class="card-title">Indoor &amp; Outdoor Lighting Schedule</div>
+
+        <div style="margin-top:10px; border-bottom:1px solid var(--border); padding-bottom:10px;">
+          <div style="font-size:11.5px; font-weight:800; color:var(--text); margin-bottom:6px;">💡 Indoor Roost Light (L1)</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div>
+              <label style="font-size:10px; color:var(--text-muted); font-weight:700;">Turn ON</label>
+              <input type="time" id="cfg-light-in-on" class="input-box" value="05:30" onchange="saveLightTimers()" />
+            </div>
+            <div>
+              <label style="font-size:10px; color:var(--text-muted); font-weight:700;">Turn OFF</label>
+              <input type="time" id="cfg-light-in-off" class="input-box" value="21:00" onchange="saveLightTimers()" />
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <div style="font-size:11.5px; font-weight:800; color:var(--text); margin-bottom:6px;">🔦 Outdoor Security Yard Light (L3)</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div>
+              <label style="font-size:10px; color:var(--text-muted); font-weight:700;">Turn ON</label>
+              <input type="time" id="cfg-light-out-on" class="input-box" value="18:45" onchange="saveLightTimers()" />
+            </div>
+            <div>
+              <label style="font-size:10px; color:var(--text-muted); font-weight:700;">Turn OFF</label>
+              <input type="time" id="cfg-light-out-off" class="input-box" value="22:30" onchange="saveLightTimers()" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 6: FEEDER MULTI-SLOT SCHEDULE -->
+      <div class="card" id="card-settings-feeder">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <div class="card-title" style="margin-bottom:0;">🌾 Gravity Feeder Multi-Slot Schedule</div>
+          <button onclick="addFeederSlot()" class="neu-btn" style="padding:5px 12px; font-size:11px; color:var(--moss);">＋ Add Slot</button>
+        </div>
+
+        <div id="feeder-slots-list" style="display:flex; flex-direction:column; gap:8px;"></div>
+      </div>
+
+      <!-- SECTION 7: MANURE ROLLER RUNTIME DURATION (Requirement 5) -->
+      <div class="card" id="card-settings-manure">
+        <div class="card-title">♻️ Manure Roller Scraper Schedule</div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px;">
+          <div>
+            <label style="font-size:11px; font-weight:700; color:var(--text);">🕐 Daily Scrape Time</label>
+            <input type="time" id="cfg-manure-time" class="input-box" value="06:00" onchange="saveManureTimer()" />
+          </div>
+          <div>
+            <label style="font-size:11px; font-weight:700; color:var(--text);">⏱️ Runtime (Seconds)</label>
+            <input type="number" id="cfg-manure-duration" class="input-box" min="5" max="180" step="5" value="30" onchange="saveManureTimer()" />
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 8: AZOLLA HARVEST TIMING -->
+      <div class="card" id="card-cfg-azolla" style="display:none;">
+        <div class="card-title">Azolla Skimmer Schedule</div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px;">
+          <div>
+            <label style="font-size:11px; font-weight:700; color:var(--text);">🌿 Harvest Time</label>
+            <input type="time" id="cfg-azolla-time" class="input-box" value="08:30" onchange="saveAzollaTimers()" />
+          </div>
+          <div>
+            <label style="font-size:11px; font-weight:700; color:var(--text);">⏱️ Duration (Sec)</label>
+            <input type="number" id="cfg-azolla-duration" class="input-box" min="30" max="300" step="10" value="90" onchange="saveAzollaTimers()" />
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 9: CHANGE ADMIN SECURITY PASSWORD (Requirement 7) -->
+      <div class="card" id="card-settings-pin">
+        <div class="card-title">🔐 Admin Security Password</div>
+
+        <div style="display:flex; gap:10px; margin-top:10px;">
+          <input type="password" id="input-new-pin" placeholder="Enter new password" class="input-box" style="margin:0; font-size:14px; text-align:center;" />
+          <button class="neu-btn" style="flex:0.8; padding:8px 14px;" onclick="changeAdminPassword()">Update</button>
+        </div>
+      </div>
+
+      <!-- SECTION 10: MULTI-USER LIVE SYNC & HARDWARE SYNC -->
+      <div class="card" id="card-esp-sync">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <strong style="font-size:14px; color:var(--text);">📡 Multi-User Live Sync</strong>
+          <span id="esp-sync-status" style="font-size:11px; font-weight:800; color:var(--moss); background:rgba(34,197,94,0.12); padding:3px 8px; border-radius:10px;">✅ Synced</span>
+        </div>
+        
+        <div style="margin-top:12px;">
+          <button class="neu-btn" style="width:100%; padding:12px; font-size:13px; font-weight:800; color:var(--text);" onclick="syncToESP()">
+            Save &amp; Sync
+          </button>
+        </div>
+        
+        <div style="font-size:10px; color:var(--text-muted); margin-top:10px; display:flex; justify-content:space-between;">
+          <span>Last sync: <strong id="lbl-last-sync" style="color:var(--text);">Just now</strong></span>
+          <span>ESP32 IP: <strong id="lbl-esp-ip" style="color:var(--text);">192.168.1.100</strong></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" id="nav-coop" onclick="switchTab('coop')">
+        <span class="icon">🐔</span>
+        <span id="nav-label-coop" data-i18n="nav_coop">Coop</span>
+      </button>
+      <button class="nav-btn" id="nav-analytics" onclick="switchTab('analytics')">
+        <span class="icon">📊</span>
+        <span id="nav-label-finances" data-i18n="nav_finances">Finances</span>
+      </button>
+      <button class="nav-btn" id="nav-cctv" onclick="switchTab('cctv')">
+        <span class="icon">📹</span>
+        <span id="nav-label-cctv" data-i18n="nav_cctv">CCTV</span>
+      </button>
+      <button class="nav-btn" id="nav-settings" onclick="handleSettingsTabClick()">
+        <span class="icon" id="nav-settings-icon">🔒</span>
+        <span id="nav-label-settings" data-i18n="nav_settings">Settings</span>
+      </button>
+    </nav>
+
+    <!-- MODAL 1: ADMIN PASSWORD GATE (Requirement 7) -->
+    <div id="modal-pin-gate" class="modal-overlay" style="display:none;" onclick="if(event.target===this) closePinModal();">
+      <div class="modal-sheet" style="text-align:center; max-width:330px;">
+        <div style="font-size:36px; margin-bottom:4px;">🔐</div>
+        <strong style="font-size:16px; color:var(--slate);">Admin Password Required</strong>
+        <div style="font-size:11.5px; color:var(--muted); margin:4px 0 14px;">Once entered, your session remains unlocked for 10 minutes or until this tab closes.</div>
+
+        <form onsubmit="event.preventDefault(); verifyPassword();">
+          <input type="password" id="input-admin-password" class="input-box" placeholder="Enter admin password" style="width:100%; text-align:center; font-size:16px; font-weight:800; padding:12px; margin:0; letter-spacing:2px;" autocomplete="current-password" />
+          <div id="pin-error-msg" style="font-size:11.5px; font-weight:800; color:var(--terracotta); min-height:18px; margin-top:6px;"></div>
+
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <button type="button" class="btn btn-outline" style="flex:1; padding:11px;" onclick="closePinModal()">Cancel</button>
+            <button type="submit" class="btn btn-moss" style="flex:1.4; padding:11px;">🔓 Unlock</button>
+          </div>
+        </form>
+        <div style="font-size:10.5px; color:var(--muted); margin-top:12px;">Protected farm management system</div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: INTERACTIVE FARM TRANSACTION (Requirement 8) -->
+    <div id="modal-tx" class="modal-overlay" style="display:none;" onclick="if(event.target===this) closeTxModal();">
+      <div class="modal-sheet">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <strong style="font-size:16px; color:var(--slate);" data-i18n="tx_modal_title">➕ Record Farm Transaction</strong>
+          <button onclick="closeTxModal()" style="border:none; background:rgba(0,0,0,0.06); width:28px; height:28px; border-radius:50%; font-size:16px; font-weight:800; cursor:pointer;">×</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+          <button id="btn-tx-type-inc" onclick="setTxType('income')" style="padding:10px; border-radius:12px; font-size:12px; font-weight:800; border:2px solid #38A169; background:rgba(56,161,105,0.1); color:#276749; cursor:pointer;" data-i18n="tx_type_inc">
+            🟢 + Income (Sale)
+          </button>
+          <button id="btn-tx-type-exp" onclick="setTxType('expense')" style="padding:10px; border-radius:12px; font-size:12px; font-weight:800; border:2px solid transparent; background:rgba(0,0,0,0.04); color:var(--text-muted); cursor:pointer;" data-i18n="tx_type_exp">
+            🔴 - Expense (Cost)
+          </button>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <label style="font-size:11px; font-weight:700; color:var(--text); display:block; margin-bottom:4px;" data-i18n="tx_cat_lbl">Category</label>
+          <select id="tx-category" class="input-box" style="width:100%; margin:0; font-size:13px; font-weight:700; background:var(--surface); color:var(--text);"></select>
+        </div>
+
+        <div style="margin-bottom:10px;">
+          <label style="font-size:11px; font-weight:700; color:var(--text); display:block; margin-bottom:4px;" data-i18n="tx_amount_lbl">Amount (₹ INR)</label>
+          <div style="position:relative; display:flex; align-items:center;">
+            <span style="position:absolute; left:12px; font-size:16px; font-weight:800; color:var(--text-muted);">₹</span>
+            <input type="number" id="tx-amount" class="input-box" placeholder="0" min="1" step="1" style="width:100%; padding-left:28px; font-size:18px; font-weight:800; margin:0;" />
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:11px; font-weight:700; color:var(--text); display:block; margin-bottom:4px;" data-i18n="tx_date_lbl">Date</label>
+            <input type="date" id="tx-date" class="input-box" style="width:100%; margin:0; font-size:11px;" />
+          </div>
+          <div>
+            <label style="font-size:11px; font-weight:700; color:var(--text); display:block; margin-bottom:4px;" data-i18n="tx_desc_lbl">Description / Note</label>
+            <input type="text" id="tx-desc" class="input-box" placeholder="e.g. 5 egg crates sold" data-i18n-placeholder="tx_desc_ph" style="width:100%; margin:0; font-size:11px;" />
+          </div>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:16px;">
+          <button class="btn btn-outline" style="flex:1; padding:10px;" onclick="closeTxModal()" data-i18n="tx_btn_cancel">Cancel</button>
+          <button class="btn btn-moss" style="flex:1.5; padding:10px;" onclick="saveTransaction()" data-i18n="tx_btn_save">💾 Save Transaction</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ═══════════════════════════════════════════════════════════════════════
+    // COOPSENSE v3.0 JAVASCRIPT MASTER ENGINE
+    // ═══════════════════════════════════════════════════════════════════════
+
+    // ── Multi-Lingual Architecture (English & Malayalam) ──────────────────
+    let currentLang = 'en';
+
+    const I18N = {
+      en: {
+        sync_status: 'Live Sync Active • Multi-User',
+        wiring_btn: 'Wiring',
+        nav_coop: 'Coop',
+        nav_finances: 'Finances',
+        nav_cctv: 'CCTV',
+        nav_settings: 'Settings',
+        autopilot_on: 'AUTOPILOT ON',
+        manual_mode: 'MANUAL MODE',
+        manual_strip_title: 'FULL MANUAL OVERRIDE — Scheduled Timers Suspended',
+        resume_auto_btn: 'Resume Auto',
+        climate_title: '🌡️ Live Climate & Flock',
+        
+        // Door
+        door_title_closed: '🚪 Coop Door (Closed)',
+        door_title_open: '🚪 Coop Door (Open)',
+        door_title_opening: '🚪 Coop Door (Opening...)',
+        door_title_closing: '🚪 Coop Door (Closing...)',
+        door_btn_open: 'Open Door',
+        door_btn_close: 'Close Door',
+        door_busy_open: '⏳ Opening...',
+        door_busy_close: '⏳ Closing...',
+        strip_door_open: '🚪 Open Door',
+        strip_door_close: '🔒 Close Door',
+        strip_door_moving: '⏳ Moving',
+        
+        // Feeder Lid
+        feeder_title_closed: '🌾 Feeder Lid (Closed)',
+        feeder_title_open: '🌾 Feeder Lid (Open)',
+        feeder_btn_open: 'Open Lid',
+        feeder_btn_close: 'Close Lid',
+        strip_feeder_open: '🌾 Open Lid',
+        strip_feeder_close: '🔒 Close Lid',
+        
+        // Lights
+        lights_title: '💡 Zone Lighting Bank',
+        lights_sub: '14h Circadian Photoperiod Target',
+        lights_l1_name: 'L1: Roosting Perch',
+        lights_l1_sub: 'Warm 2700K • Main Perch',
+        lights_l2_name: 'L2: Nesting Bay',
+        lights_l2_sub: 'Dim Amber 2200K • Egg Layer Boxes',
+        lights_l3_name: 'L3: Yard Security Flood',
+        lights_l3_sub: 'Cool White 5000K • Exterior Perimeter',
+        lights_badge_active: '⚡ ACTIVE GLOW',
+        lights_badge_gpio: '⚡ Standby',
+        
+        // Climate
+        climate_temp_status: '🌿 Climate Banding Active',
+        climate_humidity_lbl: 'Humidity',
+        
+        // Fan
+        fan_title: '💨 Climate Exhaust Fan',
+        fan_sub: 'Active Temperature Exhaust',
+        fan_badge_on: 'VENTILATING',
+        fan_badge_off: 'OFF',
+        
+        // Manure
+        manure_title: '🧹 Cleaning Roller',
+        manure_sub: 'Automated droppings tray cleaner',
+        manure_status_ready: 'READY',
+        manure_status_active: 'SCRAPING ACTIVE',
+        manure_status_cleaned: 'CLEANED',
+        manure_btn_run: '▶ Run Scraper',
+        manure_btn_stop: '⏹ Stop',
+        
+        // Chick Brooder
+        chick_title: '🐥 Chick Brooder',
+        chick_sub_off: 'Solid-State Relay • Nursery Hover',
+        chick_sub_on: 'SSR Active • Nursery Hover',
+        chick_badge_on: 'HEATING ON',
+        chick_badge_off: 'OFF',
+        
+        // Predator Guard
+        predator_title: '🛡️ Perimeter Guard',
+        predator_sub: 'Exterior PIR sensor + Strobe alarm',
+        predator_badge_armed: 'ARMED',
+        predator_badge_off: 'DISARMED',
+        
+        // Egg Harvest
+        eggs_title: "🥚 Today's Egg Harvest",
+        eggs_sub: 'Daily collection log (live multi-user sync)',
+        
+        // Azolla
+        azolla_title: '🌿 Azolla Harvester',
+        btn_run: '▶ Run',
+        btn_stop: '⏹ Stop',
+        feat_azolla: '🌿 Azolla Cultivation & Skimmer',
+        matrix_azolla: '🌿 Azolla Daily Skimming',
+        cfg_azolla_title: 'Azolla Skimmer Schedule',
+        cfg_azolla_time_lbl: '🌿 Harvest Time',
+        cfg_azolla_dur_lbl: '⏱️ Duration (Sec)',
+        
+        // Finances
+        fin_view_monthly: 'Monthly',
+        fin_view_overall: 'Overall',
+        fin_balance_title: 'Monthly Operating Balance (₹ INR)',
+        fin_cashflow_lbl: 'Net Monthly Cash Flow',
+        fin_inc_lbl: 'Income: ',
+        fin_exp_lbl: 'Expenses: ',
+        fin_egg_overview_title: 'Egg Production',
+        fin_lay_cycle_sub: 'Current Lay Cycle Summary',
+        fin_w1: 'W1',
+        fin_w2: 'W2',
+        fin_w3: 'W3',
+        fin_w4: 'W4',
+        fin_today_eggs: 'Today',
+        fin_total_eggs: 'Total Month Eggs',
+        fin_avg_lay_rate: 'Daily Avg',
+        fin_active_flock: 'Active Flock',
+        fin_ledger_title: '📖 Farm Ledger & Transactions',
+        fin_ledger_sub: 'Logged operational sales and costs',
+        fin_btn_log: '＋ Log',
+        fin_filter_all: 'All',
+        fin_filter_inc: '🟢 Income',
+        fin_filter_exp: '🔴 Expense',
+        fin_overall_profit_lbl: 'Cumulative Net Farm Profit',
+        fin_gross_revenue: 'Gross Revenue',
+        fin_capex: 'CapEx (Setup)',
+        fin_opex: 'OpEx (Running)',
+        fin_capital_recovery: 'Capital Recovery',
+        fin_overall_eggs_title: '🥚 Overall Egg Production',
+        fin_lifetime_eggs: 'Lifetime Eggs Collected',
+        fin_standard_trays: 'Standard Trays (30s)',
+        fin_min_daily_lay: 'Min Daily Lay',
+        fin_max_daily_lay: 'Max Daily Lay',
+        fin_flock_capacity: 'Flock Capacity',
+        fin_cost_breakdown_title: 'Cumulative Cost Breakdown (₹)',
+        fin_cost_build: '🏗️ Automated Coop Build & DIY Hardware (CapEx)',
+        fin_cost_chicks: '🐥 Starter Chick Flock Purchase (CapEx)',
+        fin_cost_feed: '🌾 Layer Mash, Grains & Supplements (OpEx)',
+        fin_cost_bedding: '🪵 Pine Bedding & Sanitizers (OpEx)',
+        fin_cost_power: '💡 Electricity (Brooder SSR, Fan, Lights) (OpEx)',
+        
+        // Transaction Modal
+        tx_modal_title: '➕ Record Farm Transaction',
+        tx_type_inc: '🟢 + Income (Sale)',
+        tx_type_exp: '🔴 - Expense (Cost)',
+        tx_cat_lbl: 'Category',
+        tx_amount_lbl: 'Amount (₹ INR)',
+        tx_date_lbl: 'Date',
+        tx_desc_lbl: 'Description / Note',
+        tx_desc_ph: 'e.g. 5 egg crates sold',
+        tx_btn_cancel: 'Cancel',
+        tx_btn_save: '💾 Save Transaction',
+        unit_trays: 'Trays',
+        unit_eggs: 'Eggs',
+        unit_hens: 'Hens',
+        
+        // CCTV
+        cctv_title: 'Coop CCTV Feeds',
+        cctv_sub: 'ESP32-CAM RTSP Stream Array',
+        cctv_active_badge: '4 Cameras Active',
+        cctv_cam1_name: 'CAM 1: Roost Perch',
+        cctv_cam1_sub: 'IR Night Vision Active',
+        cctv_cam2_name: 'CAM 2: Nesting Bay',
+        cctv_cam2_sub: 'Egg Count AI Active',
+        cctv_cam3_name: 'CAM 3: Run & Feeder',
+        cctv_cam3_sub: 'Motion Detection Active',
+        cctv_cam4_name: 'CAM 4: Perimeter Yard',
+        cctv_cam4_sub: 'Predator Alert Grid',
+        cctv_live_badge: '● LIVE',
+        
+        // Settings
+        settings_title: 'System Configuration',
+        settings_sub: 'Protected Admin Control Panel',
+        settings_lock_btn: '🔒 Lock Settings',
+        settings_lang_card_title: '🌐 Interface Language / ഭാഷ',
+        settings_lang_card_desc: 'Maintained per user on this phone. Multiple users can set different languages.',
+        settings_features_title: '🧩 Hardware Subsystems & Feature Flags',
+        settings_features_desc: 'Enable or disable individual modules. Disabling any feature completely removes it from the Coop tab, manual strip, and schedules.',
+        
+        // Toasts
+        toast_door_opening: '🚪 Opening Coop Door...',
+        toast_door_open_done: '✅ Coop Door is now OPEN',
+        toast_door_closing: '🔒 Closing Coop Door...',
+        toast_door_close_done: '🔒 Coop Door CLOSED and locked',
+        toast_door_busy: '⏳ Door motor is currently active...',
+        toast_door_already_open: '🚪 Door is already OPEN',
+        toast_door_already_closed: '🚪 Door is already CLOSED',
+        toast_feeder_opened: '🌾 Feeder Lid OPENED',
+        toast_feeder_closed: '🔒 Feeder Lid CLOSED',
+        toast_feeder_already_open: '🌾 Feeder lid is already OPEN',
+        toast_feeder_already_closed: '🔒 Feeder lid is already CLOSED',
+        toast_manure_started: '♻️ Manure Roller Started: ',
+        toast_manure_stopped: '⏹ Manure Roller Stopped',
+        toast_manure_complete: '✅ Manure Scraping Complete',
+        toast_azolla_started: '🌿 Azolla Harvester Started',
+        toast_azolla_stopped: '⏹ Azolla Harvester Stopped',
+        toast_azolla_complete: '✅ Azolla Harvesting Complete',
+        toast_fan_on: '🌀 Exhaust Fan ON',
+        toast_fan_off: '🌀 Exhaust Fan OFF',
+        toast_chick_on: '🐥 Chick Brooder ON',
+        toast_chick_off: '🐥 Chick Brooder OFF',
+        toast_predator_on: '🦊 Predator Guard ARMED',
+        toast_predator_off: '🦊 Predator Guard DISARMED',
+        toast_autopilot_on: '⚡ Autopilot Active: Matrix routines running',
+        toast_manual_mode: '⚠️ Full Manual Override Mode'
+      },
+      ml: {
+        sync_status: 'ലൈവ് കണക്ഷൻ',
+        wiring_btn: 'വയറിങ്',
+        nav_coop: 'കൂട്',
+        nav_finances: 'കണക്ക്',
+        nav_cctv: 'ക്യാമറ',
+        nav_settings: 'സെറ്റിംഗ്സ്',
+        autopilot_on: 'ഓട്ടോ',
+        manual_mode: 'മാനുവൽ',
+        manual_strip_title: 'മാനുവൽ മോഡ് — ടൈമറുകൾ നിർത്തി',
+        resume_auto_btn: 'ഓട്ടോ ആക്കുക',
+        climate_title: '🌡️ കാലാവസ്ഥ & കോഴികൾ',
+        
+        // Door
+        door_title_closed: '🚪 വാതിൽ (അടച്ചു)',
+        door_title_open: '🚪 വാതിൽ (തുറന്നു)',
+        door_title_opening: '🚪 വാതിൽ (തുറക്കുന്നു...)',
+        door_title_closing: '🚪 വാതിൽ (അടയ്ക്കുന്നു...)',
+        door_btn_open: 'തുറക്കുക',
+        door_btn_close: 'അടയ്ക്കുക',
+        door_busy_open: '⏳ തുറക്കുന്നു...',
+        door_busy_close: '⏳ അടയ്ക്കുന്നു...',
+        strip_door_open: '🚪 തുറക്കുക',
+        strip_door_close: '🔒 അടയ്ക്കുക',
+        strip_door_moving: '⏳ നീങ്ങുന്നു',
+        
+        // Feeder Lid
+        feeder_title_closed: '🌾 തീറ്റ പാത്രം (അടച്ചു)',
+        feeder_title_open: '🌾 തീറ്റ പാത്രം (തുറന്നു)',
+        feeder_btn_open: 'തുറക്കുക',
+        feeder_btn_close: 'അടയ്ക്കുക',
+        strip_feeder_open: '🌾 തുറക്കുക',
+        strip_feeder_close: '🔒 അടയ്ക്കുക',
+        
+        // Lights
+        lights_title: '💡 ലൈറ്റുകൾ',
+        lights_sub: 'ഷെഡ്യൂൾ',
+        lights_l1_name: 'L1: പ്രധാന ലൈറ്റ്',
+        lights_l1_sub: 'മെയിൻ വെളിച്ചം',
+        lights_l2_name: 'L2: കൂട് ലൈറ്റ്',
+        lights_l2_sub: 'മുട്ടയിടൽ അറ',
+        lights_l3_name: 'L3: പുറത്തെ ലൈറ്റ്',
+        lights_l3_sub: 'സുരക്ഷാ വെളിച്ചം',
+        lights_badge_active: 'ഓൺ',
+        lights_badge_gpio: 'ഓഫ്',
+        
+        // Climate
+        climate_temp_status: 'സാധാരണ നില',
+        climate_humidity_lbl: 'ഈർപ്പം',
+        
+        // Fan
+        fan_title: '💨 ഫാൻ',
+        fan_sub: 'താപനില ഫാൻ',
+        fan_badge_on: 'ഓൺ',
+        fan_badge_off: 'ഓഫ്',
+        
+        // Manure
+        manure_title: '🧹 ക്ലീനിംഗ് റോളർ',
+        manure_sub: 'ക്ലീനിംഗ്',
+        manure_status_ready: 'റെഡി',
+        manure_status_active: 'പ്രവർത്തിക്കുന്നു',
+        manure_status_cleaned: 'പൂർത്തിയായി',
+        manure_btn_run: '▶ തുടങ്ങുക',
+        manure_btn_stop: '⏹ നിർത്തുക',
+        
+        // Chick Brooder
+        chick_title: '🐥 ബ്രൂഡർ (ചൂട്)',
+        chick_sub_off: 'ചൂട് ഹീറ്റർ',
+        chick_sub_on: 'ചൂട് ഓൺ',
+        chick_badge_on: 'ഓൺ',
+        chick_badge_off: 'ഓഫ്',
+        
+        // Predator Guard
+        predator_title: '🛡️ സുരക്ഷാ അലാറം',
+        predator_sub: 'രാത്രി കാവൽ',
+        predator_badge_armed: 'ഓൺ',
+        predator_badge_off: 'ഓഫ്',
+        
+        // Egg Harvest
+        eggs_title: '🥚 ഇന്നത്തെ മുട്ട',
+        eggs_sub: 'മുട്ട കണക്ക്',
+        
+        // Azolla
+        azolla_title: '🌿 അസോള',
+        btn_run: '▶ തുടങ്ങുക',
+        btn_stop: '⏹ നിർത്തുക',
+        feat_azolla: '🌿 അസോള കൾട്ടിവേഷൻ',
+        matrix_azolla: '🌿 ദിവസേന അസോള മാറ്റൽ',
+        cfg_azolla_title: 'അസോള ടൈമർ',
+        cfg_azolla_time_lbl: '🌿 സമയം',
+        cfg_azolla_dur_lbl: '⏱️ സമയം (സെക്കൻഡ്)',
+        
+        // Finances
+        fin_view_monthly: 'മാസം',
+        fin_view_overall: 'ആകെ',
+        fin_balance_title: 'പ്രതിമാസ കണക്ക് (₹)',
+        fin_cashflow_lbl: 'അറ്റാദായം (ലാഭം)',
+        fin_inc_lbl: 'വരുമാനം: ',
+        fin_exp_lbl: 'ചെലവ്: ',
+        fin_egg_overview_title: 'മുട്ട കണക്ക്',
+        fin_lay_cycle_sub: 'ഈ മാസം',
+        fin_w1: 'ആഴ്ച 1',
+        fin_w2: 'ആഴ്ച 2',
+        fin_w3: 'ആഴ്ച 3',
+        fin_w4: 'ആഴ്ച 4',
+        fin_today_eggs: 'ഇന്ന്',
+        fin_total_eggs: 'ആകെ മുട്ട',
+        fin_avg_lay_rate: 'ശരാശരി/ദിവസം',
+        fin_active_flock: 'ആകെ കോഴികൾ',
+        fin_ledger_title: '📖 വരവ് ചിലവ് കണക്കുകൾ',
+        fin_ledger_sub: 'ദിവസേനയുള്ള വിൽപനയും ചിലവുകളും',
+        fin_btn_log: '＋ ചേർക്കുക',
+        fin_filter_all: 'എല്ലാം',
+        fin_filter_inc: '🟢 വരവ്',
+        fin_filter_exp: '🔴 ചിലവ്',
+        fin_overall_profit_lbl: 'ആകെ അറ്റാദായം (ലാഭം)',
+        fin_gross_revenue: 'ആകെ വരുമാനം',
+        fin_capex: 'കൂട് നിർമ്മാണം',
+        fin_opex: 'തീറ്റ & ചിലവ്',
+        fin_capital_recovery: 'മുതൽമുടക്ക് തിരിച്ചുപിടിക്കൽ',
+        fin_overall_eggs_title: '🥚 ആകെ മുട്ട ഉത്പാദനം',
+        fin_lifetime_eggs: 'ഇതുവരെ ലഭിച്ച മുട്ടകൾ',
+        fin_standard_trays: 'ആകെ ട്രേ (30 എണ്ണം)',
+        fin_min_daily_lay: 'കുറഞ്ഞത് (ദിവസം)',
+        fin_max_daily_lay: 'കൂടിയത് (ദിവസം)',
+        fin_flock_capacity: 'ആകെ കോഴികൾ',
+        fin_cost_breakdown_title: 'ചിലവുകളുടെ വിശദാംശങ്ങൾ (₹)',
+        fin_cost_build: '🏗️ കൂട് നിർമ്മാണം & മെഷീനുകൾ',
+        fin_cost_chicks: '🐥 കോഴിക്കുഞ്ഞുങ്ങൾ വാങ്ങിയത്',
+        fin_cost_feed: '🌾 കോഴിത്തീറ്റ & ധാന്യങ്ങൾ',
+        fin_cost_bedding: '🪵 ബെഡ്ഡിംഗ് & അണുനാശിനി',
+        fin_cost_power: '💡 കറണ്ട് (ഹീറ്റർ, ഫാൻ, ലൈറ്റ്)',
+        
+        // Transaction Modal
+        tx_modal_title: '➕ കണക്ക് രേഖപ്പെടുത്തുക',
+        tx_type_inc: '🟢 + വരവ് (വിൽപന)',
+        tx_type_exp: '🔴 - ചിലവ്',
+        tx_cat_lbl: 'ഇനം',
+        tx_amount_lbl: 'തുക (₹)',
+        tx_date_lbl: 'തീയതി',
+        tx_desc_lbl: 'വിവരണം',
+        tx_desc_ph: 'ഉദാ: മുട്ട വിറ്റത്',
+        tx_btn_cancel: 'റദ്ദാക്കുക',
+        tx_btn_save: '💾 സേവ് ചെയ്യുക',
+        unit_trays: 'ട്രേ',
+        unit_eggs: 'മുട്ട',
+        unit_hens: 'കോഴി',
+        
+        // CCTV
+        cctv_title: 'സിസിടിവി',
+        cctv_sub: 'ക്യാമറ ദൃശ്യങ്ങൾ',
+        cctv_active_badge: '4 ക്യാമറ',
+        cctv_cam1_name: 'ക്യാമറ 1: കൂട്ടിനുള്ളിൽ',
+        cctv_cam1_sub: 'നൈറ്റ് വിഷൻ',
+        cctv_cam2_name: 'ക്യാമറ 2: മുട്ടക്കൂട്',
+        cctv_cam2_sub: 'മുട്ട നിരീക്ഷണം',
+        cctv_cam3_name: 'ക്യാമറ 3: പുറംഭാഗം',
+        cctv_cam3_sub: 'ചലനം',
+        cctv_cam4_name: 'ക്യാമറ 4: സുരക്ഷ',
+        cctv_cam4_sub: 'രാത്രി കാവൽ',
+        cctv_live_badge: '● ലൈവ്',
+        
+        // Settings
+        settings_title: 'സെറ്റിംഗ്സ്',
+        settings_sub: 'കൺട്രോൾ പാനൽ',
+        settings_lock_btn: '🔒 ലോക്ക്',
+        settings_lang_card_title: '🌐 ഭാഷ',
+        settings_lang_card_desc: 'ഭാഷ തിരഞ്ഞെടുക്കുക',
+        settings_features_title: '🧩 ഓപ്ഷനുകൾ',
+        settings_features_desc: 'ആവശ്യമുള്ളവ ഓൺ ചെയ്യുക',
+        
+        // Toasts
+        toast_door_opening: '🚪 വാതിൽ തുറക്കുന്നു...',
+        toast_door_open_done: '✅ വാതിൽ തുറന്നു',
+        toast_door_closing: '🔒 വാതിൽ അടയ്ക്കുന്നു...',
+        toast_door_close_done: '🔒 വാതിൽ അടച്ചു',
+        toast_door_busy: '⏳ പ്രവർത്തിക്കുന്നു...',
+        toast_door_already_open: '🚪 വാതിൽ തുറന്നിരിക്കുകയാണ്',
+        toast_door_already_closed: '🚪 വാതിൽ അടഞ്ഞിരിക്കുകയാണ്',
+        toast_feeder_opened: '🌾 തീറ്റ പാത്രം തുറന്നു',
+        toast_feeder_closed: '🔒 തീറ്റ പാത്രം അടച്ചു',
+        toast_feeder_already_open: '🌾 തീറ്റ പാത്രം തുറന്നിരിക്കുകയാണ്',
+        toast_feeder_already_closed: '🔒 തീറ്റ പാത്രം അടഞ്ഞിരിക്കുകയാണ്',
+        toast_manure_started: '🧹 ക്ലീനിംഗ് തുടങ്ങി',
+        toast_manure_stopped: '⏹ നിർത്തി',
+        toast_manure_complete: '✅ പൂർത്തിയായി',
+        toast_azolla_started: '🌿 അസോള മെഷീൻ തുടങ്ങി',
+        toast_azolla_stopped: '⏹ അസോള മെഷീൻ നിർത്തി',
+        toast_azolla_complete: '✅ അസോള മാറ്റൽ പൂർത്തിയായി',
+        toast_fan_on: '🌀 ഫാൻ ഓൺ',
+        toast_fan_off: '🌀 ഫാൻ ഓഫ്',
+        toast_chick_on: '🐥 ഹീറ്റർ ഓൺ',
+        toast_chick_off: '🐥 ഹീറ്റർ ഓഫ്',
+        toast_predator_on: '🛡️ സുരക്ഷ ഓൺ',
+        toast_predator_off: '🛡️ സുരക്ഷ ഓഫ്',
+        toast_autopilot_on: '⚡ ഓട്ടോ ഓൺ',
+        toast_manual_mode: '⚠️ മാനുവൽ മോഡ്'
+      }
+    };
+
+    function t(key, fallback = '') {
+      if (I18N[currentLang] && I18N[currentLang][key] !== undefined) {
+        return I18N[currentLang][key];
+      }
+      if (I18N['en'] && I18N['en'][key] !== undefined) {
+        return I18N['en'][key];
+      }
+      return fallback || key;
+    }
+
+    function applyLanguage(lang) {
+      if (lang !== 'en' && lang !== 'ml') lang = 'en';
+      currentLang = lang;
+      document.documentElement.lang = lang;
+
+      // Update static data-i18n elements (keep Settings tab full in English)
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const k = el.getAttribute('data-i18n');
+        if (!k) return;
+        const targetLang = el.closest('#tab-settings') ? 'en' : lang;
+        if (I18N[targetLang] && I18N[targetLang][k] !== undefined) {
+          el.textContent = I18N[targetLang][k];
+        }
+      });
+
+      // Update placeholders (keep Settings tab full in English)
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const k = el.getAttribute('data-i18n-placeholder');
+        if (!k) return;
+        const targetLang = el.closest('#tab-settings') ? 'en' : lang;
+        if (I18N[targetLang] && I18N[targetLang][k] !== undefined) {
+          el.setAttribute('placeholder', I18N[targetLang][k]);
+        }
+      });
+
+      // Header language button: displays the alternative language as the click target
+      const langLabel = document.getElementById('lang-current-label');
+      if (langLabel) {
+        langLabel.textContent = (lang === 'en') ? 'മലയാളം' : 'English';
+      }
+
+      // Settings screen tiles
+      const btnEn = document.getElementById('lang-btn-en');
+      const btnMl = document.getElementById('lang-btn-ml');
+      if (btnEn) btnEn.classList.toggle('active', lang === 'en');
+      if (btnMl) btnMl.classList.toggle('active', lang === 'ml');
+
+      // Refresh dynamic UI components
+      if (typeof updateDoorUI === 'function') updateDoorUI();
+      if (typeof updateFeederLidUI === 'function') updateFeederLidUI();
+      if (typeof updateFanUI === 'function') updateFanUI();
+      if (typeof updateChickHeatUI === 'function') updateChickHeatUI();
+      if (typeof updateLightPill === 'function') {
+        updateLightPill('in1', lightIndoor1);
+        updateLightPill('in2', lightIndoor2);
+        updateLightPill('out', lightOutdoor);
+      }
+      if (typeof calculateFinances === 'function') calculateFinances();
+      if (typeof renderTransactions === 'function') renderTransactions();
+      if (typeof setTxType === 'function' && typeof currentTxType !== 'undefined') setTxType(currentTxType);
+      
+      // Settings flock count shows number alone
+      const lblFlock = document.getElementById('lbl-flock-count');
+      if (lblFlock) lblFlock.textContent = totalHens.toLocaleString('en-IN');
+
+      const autoTxt = document.getElementById('auto-text');
+      if (autoTxt) {
+        autoTxt.textContent = autoMode ? t('autopilot_on') : t('manual_mode');
+      }
+    }
+
+    function setLanguage(lang, triggerToast = true) {
+      if (lang !== 'en' && lang !== 'ml') return;
+      currentLang = lang;
+      try {
+        localStorage.setItem('coopsense_lang', lang);
+      } catch(e) {}
+      applyLanguage(lang);
+      if (triggerToast) {
+        showToast(lang === 'ml' ? '🌐 ഭാഷ മലയാളമാക്കി മാറ്റി' : '🌐 Language changed to English');
+      }
+    }
+
+    function toggleLanguage() {
+      setLanguage(currentLang === 'en' ? 'ml' : 'en');
+    }
+
+    // ── Theme Management (Dark / Light Mode) ─────────────────────────────
+    function initTheme() {
+      const savedTheme = localStorage.getItem('coopsense_theme') || 'light';
+      applyTheme(savedTheme);
+    }
+
+    function toggleTheme() {
+      const isDark = document.body.classList.contains('dark-mode');
+      applyTheme(isDark ? 'light' : 'dark');
+    }
+
+    function applyTheme(theme) {
+      const isDark = theme === 'dark';
+      document.body.classList.toggle('dark-mode', isDark);
+      const btn = document.getElementById('btn-theme-toggle');
+      if (btn) btn.textContent = isDark ? '☀️' : '🌙';
+      try {
+        localStorage.setItem('coopsense_theme', theme);
+      } catch(e) {}
+    }
+
+    // ── ESP Connection Status UI Indicator ──────────────────────────────
+    function updateEspStatus(online) {
+      const led = document.getElementById('esp-led');
+      const txt = document.getElementById('esp-status-text');
+      if (led) {
+        led.className = online ? 'led-blinking online' : 'led-blinking offline';
+      }
+      if (txt) {
+        txt.textContent = online ? 'Online' : 'Offline';
+        txt.style.color = online ? 'var(--moss)' : 'var(--terracotta)';
+      }
+    }
+
+    // ── Global State Variables ───────────────────────────────────────────
+    let autoMode = true;
+    let doorState = 'closed';
+    let eggsToday = 0;
+    let totalHens = 0;
+    let curTemp = 24.8;
+    let curHumidity = 62.0;
+    let espIP = '192.168.1.100';
+
+    // Actuator States (read in real-time from ESP32 GPIOs)
+    let lightIndoor1 = false;
+    let lightIndoor2 = false;
+    let lightOutdoor = false;
+    let fanOn = false;
+    let chickHeat = false;
+    let predatorGuard = true;
+    let feederLidOpen = false;
+    let manureRunning = false;
+    let manureCountdownInterval = null;
+    let manureRemainingSec = 30;
+
+    // Settings Parameters
+    let manureRotationTime = '06:00';
+    let manureRunDurationSec = 30;
+    let settingsDirty = false;
+    let adminPassword = '3754';
+    const backupPassword = '3754'; // Master Recovery Key (Permanent Institutional Backup)
+    let settingsUnlocked = false;
+
+    // Lighting schedule vars
+    let lightIndoorOnTime = '05:30';
+    let lightIndoorOffTime = '21:00';
+    let lightOutdoorOnTime = '18:45';
+    let lightOutdoorOffTime = '22:30';
+
+    // Azolla harvest state
+    let azollaHarvestTime = '08:30';
+    let azollaSkimDurationSec = 90;
+
+    // ── Master Feature Flags (Universal System-Wide Enforcement) ─────────
+    let featureFlags = {
+      door: true,
+      egg_tracker: true,
+      feeder: true,
+      lights: true,
+      manure: true,
+      fan: true,
+      heater: true,
+      predator: true,
+      cctv: true,
+      azolla: false   // Disabled by default
+    };
+
+    // Load feature flags from localStorage if present
+    try {
+      const storedFeats = localStorage.getItem('coopsense_feature_flags');
+      if (storedFeats) {
+        featureFlags = Object.assign(featureFlags, JSON.parse(storedFeats));
+      }
+    } catch(e) {}
+
+    // ── Autopilot Automation Matrix (Requirement 9) ──────────────────────
+    let autopilotMatrix = {
+      door: true,
+      lights: true,
+      feeder: true,
+      fan: true,
+      heater: true,
+      predator: true,
+      manure: true,
+      azolla: false
+    };
+
+    try {
+      const storedMatrix = localStorage.getItem('coopsense_autopilot_matrix');
+      if (storedMatrix) {
+        autopilotMatrix = Object.assign(autopilotMatrix, JSON.parse(storedMatrix));
+      }
+    } catch(e) {}
+
+    // ── Multi-User Live Synchronization Engine (Requirement 1) ───────────
+    let syncChannel = null;
+    try {
+      if (typeof window !== 'undefined' && 'BroadcastChannel' in window && location.protocol !== 'file:') {
+        syncChannel = new BroadcastChannel('coopsense_sync_bus');
+        syncChannel.onmessage = function(ev) {
+          if (!ev || !ev.data) return;
+          handleRemoteSyncEvent(ev.data);
+        };
+      }
+    } catch(e) {
+      console.warn('BroadcastChannel disabled (opaque origin / file:// mode):', e);
+      syncChannel = null;
+    }
+
+    function broadcastState(type, payload) {
+      try {
+        if (syncChannel) {
+          syncChannel.postMessage({ type: type, payload: payload, senderId: Math.random() });
+        }
+      } catch(e) {}
+      try {
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem('coopsense_sync_event', JSON.stringify({ type: type, payload: payload, t: Date.now() }));
+        }
+      } catch(e) {}
+    }
+
+    function handleRemoteSyncEvent(msg) {
+      if (msg.type === 'EGGS_UPDATE') {
+        eggsToday = msg.payload;
+        const inputEl = document.getElementById('input-eggs');
+        if (inputEl) inputEl.value = eggsToday;
+      } else if (msg.type === 'ACTUATOR_UPDATE') {
+        applyHardwarePayload(msg.payload);
+      } else if (msg.type === 'TRANSACTION_LOGGED') {
+        reloadTransactionsFromStorage();
+      } else if (msg.type === 'SETTINGS_UPDATE') {
+        reloadSettingsFromStorage();
+      }
+    }
+
+    // ── Universal System-Wide Feature Enforcement (Requirements 3 & 6) ───
+    function applyFeatureFlags() {
+      // 1. Coop Tab Card Visibility
+      const mapCard = {
+        door: 'card-door',
+        feeder: 'card-feeder-lid',
+        lights: 'card-lights',
+        fan: 'card-fan-widget',
+        manure: 'card-manure-roller',
+        egg_tracker: 'card-egg-harvest',
+        heater: 'card-chick',
+        predator: 'card-predator-guard',
+        azolla: 'card-azolla-widget'
+      };
+
+      for (let feat in mapCard) {
+        const el = document.getElementById(mapCard[feat]);
+        if (el) {
+          if (feat === 'egg_tracker') {
+            el.style.display = featureFlags[feat] ? 'flex' : 'none';
+          } else {
+            el.style.display = featureFlags[feat] ? 'block' : 'none';
+          }
+        }
+      }
+
+      // 2. CCTV Tab Visibility & Tab Redirect if Active
+      const navCctv = document.getElementById('nav-cctv');
+      const tabCctv = document.getElementById('tab-cctv');
+      if (navCctv) navCctv.style.display = featureFlags.cctv ? 'flex' : 'none';
+      if (tabCctv && !featureFlags.cctv) {
+        if (tabCctv.style.display !== 'none') {
+          switchTab('coop');
+        }
+        tabCctv.style.display = 'none';
+      }
+
+      // 3. Finances Tab dependencies
+      const eggStats = document.getElementById('card-monthly-egg-stats');
+      if (eggStats) eggStats.style.display = featureFlags.egg_tracker ? 'block' : 'none';
+
+      // 4. Settings Configuration Cards Visibility
+      const mapSettingsCard = {
+        door: 'card-settings-door',
+        egg_tracker: 'card-settings-flock',
+        feeder: 'card-settings-feeder',
+        lights: 'card-settings-lights',
+        manure: 'card-settings-manure',
+        azolla: 'card-cfg-azolla'
+      };
+      for (let feat in mapSettingsCard) {
+        const el = document.getElementById(mapSettingsCard[feat]);
+        if (el) {
+          el.style.display = featureFlags[feat] ? 'block' : 'none';
+        }
+      }
+
+      // 5. Autopilot Automation Matrix items visibility (all subsystems)
+      const mapMatrixWrap = {
+        door: 'matrix-wrap-door',
+        lights: 'matrix-wrap-lights',
+        feeder: 'matrix-wrap-feeder',
+        fan: 'matrix-wrap-fan',
+        heater: 'matrix-wrap-heater',
+        predator: 'matrix-wrap-predator',
+        manure: 'matrix-wrap-manure',
+        azolla: 'matrix-wrap-azolla'
+      };
+      for (let feat in mapMatrixWrap) {
+        const el = document.getElementById(mapMatrixWrap[feat]);
+        if (el) {
+          el.style.display = featureFlags[feat] ? 'flex' : 'none';
+        }
+      }
+
+      // 6. Manual strip buttons visibility
+      const stripMap = {
+        door: ['strip-btn-door'],
+        feeder: ['strip-btn-feeder'],
+        lights: ['strip-btn-l1', 'strip-btn-l2', 'strip-btn-l3'],
+        manure: ['strip-btn-manure'],
+        fan: ['strip-btn-fan']
+      };
+      for (let feat in stripMap) {
+        stripMap[feat].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = featureFlags[feat] ? 'block' : 'none';
+        });
+      }
+
+      // 7. Update Feature Toggles Pills in Settings
+      for (let feat in featureFlags) {
+        const pill = document.getElementById('feat-toggle-' + feat);
+        if (pill) {
+          pill.classList.toggle('on', featureFlags[feat]);
+          pill.classList.toggle('off', !featureFlags[feat]);
+        }
+      }
+
+      // Azolla sub-label
+      const azSub = document.getElementById('sub-feat-azolla');
+      if (azSub) {
+        azSub.textContent = featureFlags.azolla ? 'Skimmer paddle active' : 'Disabled • Standing pond mode';
+      }
+    }
+
+    function toggleFeature(feat) {
+      featureFlags[feat] = !featureFlags[feat];
+      try {
+        localStorage.setItem('coopsense_feature_flags', JSON.stringify(featureFlags));
+      } catch(e) {}
+      applyFeatureFlags();
+      markSettingsDirty();
+      broadcastState('SETTINGS_UPDATE', { featureFlags: featureFlags });
+      showToast((featureFlags[feat] ? '✅ Enabled: ' : '⏸️ Disabled: ') + feat.toUpperCase());
+    }
+
+    // ── Autopilot Matrix Management (Requirement 9) ──────────────────────
+    function saveAutopilotMatrix() {
+      autopilotMatrix.door = document.getElementById('matrix-auto-door').checked;
+      autopilotMatrix.lights = document.getElementById('matrix-auto-lights').checked;
+      autopilotMatrix.feeder = document.getElementById('matrix-auto-feeder').checked;
+      autopilotMatrix.fan = document.getElementById('matrix-auto-fan').checked;
+      autopilotMatrix.heater = document.getElementById('matrix-auto-heater').checked;
+      autopilotMatrix.predator = document.getElementById('matrix-auto-predator').checked;
+      autopilotMatrix.manure = document.getElementById('matrix-auto-manure').checked;
+      autopilotMatrix.azolla = document.getElementById('matrix-auto-azolla').checked;
+
+      try {
+        localStorage.setItem('coopsense_autopilot_matrix', JSON.stringify(autopilotMatrix));
+      } catch(e) {}
+      markSettingsDirty();
+      showToast('🤖 Autopilot Matrix Updated');
+    }
+
+    function initAutopilotMatrixUI() {
+      for (let k in autopilotMatrix) {
+        const chk = document.getElementById('matrix-auto-' + k);
+        if (chk) chk.checked = autopilotMatrix[k];
+      }
+    }
+
+    // ── Tab Navigation & Security Lock Gate (Requirement 7 & Session Timeout) ──
+    function isSessionAuthenticated() {
+      try {
+        const expiryStr = sessionStorage.getItem('coopsense_auth_expiry');
+        if (!expiryStr) return false;
+        const expiry = parseInt(expiryStr, 10);
+        if (isNaN(expiry)) return false;
+        if (Date.now() < expiry) return true;
+        sessionStorage.removeItem('coopsense_auth_expiry');
+      } catch(e) {}
+      return false;
+    }
+
+    function updateSettingsNavIcon() {
+      const icon = document.getElementById('nav-settings-icon');
+      if (icon) icon.textContent = isSessionAuthenticated() ? '⚙️' : '🔒';
+    }
+
+    function switchTab(tabId) {
+      if (tabId === 'finances') tabId = 'analytics';
+
+      // Enforce password protection on Settings tab
+      if (tabId === 'settings') {
+        if (!isSessionAuthenticated()) {
+          settingsUnlocked = false;
+          updateSettingsNavIcon();
+          openPasswordModal();
+          return;
+        }
+        settingsUnlocked = true;
+        updateSettingsNavIcon();
+      }
+
+      document.querySelectorAll('.content-area').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      
+      const target = document.getElementById('tab-' + tabId);
+      const btn = document.getElementById('nav-' + tabId);
+      if (target) target.style.display = 'flex';
+      if (btn) btn.classList.add('active');
+    }
+
+    function handleSettingsTabClick() {
+      if (isSessionAuthenticated()) {
+        settingsUnlocked = true;
+        switchTab('settings');
+      } else {
+        settingsUnlocked = false;
+        openPasswordModal();
+      }
+    }
+
+    function openPasswordModal() {
+      const modal = document.getElementById('modal-pin-gate');
+      const input = document.getElementById('input-admin-password');
+      const err = document.getElementById('pin-error-msg');
+      if (err) err.textContent = '';
+      if (input) input.value = '';
+      if (modal) modal.style.display = 'flex';
+      setTimeout(() => { if (input) input.focus(); }, 120);
+    }
+
+    function closePasswordModal() {
+      const modal = document.getElementById('modal-pin-gate');
+      if (modal) modal.style.display = 'none';
+      const input = document.getElementById('input-admin-password');
+      if (input) input.value = '';
+    }
+
+    function closePinModal() { closePasswordModal(); }
+
+    let sessionExpiryTimeout = null;
+    function startSessionExpiryTimer() {
+      clearTimeout(sessionExpiryTimeout);
+      try {
+        const expiry = parseInt(sessionStorage.getItem('coopsense_auth_expiry'), 10);
+        if (expiry) {
+          const remainingMs = expiry - Date.now();
+          if (remainingMs > 0) {
+            sessionExpiryTimeout = setTimeout(expireSession, remainingMs);
+          } else {
+            expireSession();
+          }
+        }
+      } catch(e) {}
+    }
+
+    function expireSession() {
+      try { sessionStorage.removeItem('coopsense_auth_expiry'); } catch(e) {}
+      settingsUnlocked = false;
+      updateSettingsNavIcon();
+      const settingsTab = document.getElementById('tab-settings');
+      if (settingsTab && settingsTab.style.display !== 'none') {
+        switchTab('coop');
+        showToast('🔒 10-minute session expired. Password required to access Settings.');
+      }
+    }
+
+    function verifyPassword() {
+      const input = document.getElementById('input-admin-password');
+      const err = document.getElementById('pin-error-msg');
+      const entered = input ? input.value.trim() : '';
+
+      if (entered === adminPassword || entered === backupPassword) {
+        const expiryTime = Date.now() + (10 * 60 * 1000); // 10 minutes session
+        try {
+          sessionStorage.setItem('coopsense_auth_expiry', expiryTime.toString());
+        } catch(e) {}
+        settingsUnlocked = true;
+        closePasswordModal();
+        switchTab('settings');
+        updateSettingsNavIcon();
+        startSessionExpiryTimer();
+        showToast('🔓 Session Active (Valid for 10 min or until tab closed)');
+      } else {
+        if (err) err.textContent = 'Incorrect password. Try again.';
+        if (input) {
+          input.value = '';
+          input.focus();
+        }
+      }
+    }
+
+    function verifyPin() { verifyPassword(); }
+
+    function lockSettings() {
+      try { sessionStorage.removeItem('coopsense_auth_expiry'); } catch(e) {}
+      clearTimeout(sessionExpiryTimeout);
+      settingsUnlocked = false;
+      updateSettingsNavIcon();
+      switchTab('coop');
+      showToast('🔒 Settings Session Terminated & Locked');
+    }
+
+    function lockSettingsSilently() {
+      settingsUnlocked = false;
+      updateSettingsNavIcon();
+    }
+
+    function changeAdminPassword() {
+      const input = document.getElementById('input-new-pin');
+      const val = input.value.trim();
+      if (val.length >= 2) {
+        adminPassword = val;
+        try {
+          localStorage.setItem('coopsense_admin_password', adminPassword);
+        } catch(e) {}
+        input.value = '';
+        showToast('✅ Admin password updated');
+      } else {
+        showToast('⚠️ Password must be at least 2 characters');
+      }
+    }
+
+    function changeAdminPin() { changeAdminPassword(); }
+
+    // ── Master Autopilot & Manual Mode Toggle ─────────────────────────────
+    function toggleAutoMode() {
+      autoMode = !autoMode;
+      const btn = document.getElementById('btn-autopilot');
+      const dot = document.getElementById('auto-dot');
+      const txt = document.getElementById('auto-text');
+      const strip = document.getElementById('autopilot-mode-strip');
+
+      if (autoMode) {
+        btn.classList.remove('manual');
+        dot.style.background = 'var(--moss)';
+        txt.textContent = t('autopilot_on');
+        if (strip) strip.style.display = 'none';
+        showToast(t('toast_autopilot_on'));
+      } else {
+        btn.classList.add('manual');
+        dot.style.background = '#EF4444';
+        txt.textContent = t('manual_mode');
+        if (strip) strip.style.display = 'flex';
+        showToast(t('toast_manual_mode'));
+      }
+      broadcastState('ACTUATOR_UPDATE', { autoMode: autoMode });
+    }
+
+    // ── Motorized Door Control & Contextual State Management ──────────────
+    let doorBusy = false;
+
+    function updateDoorUI() {
+      const openBtn = document.getElementById('btn-open-door');
+      const closeBtn = document.getElementById('btn-close-door');
+      const statusBadge = document.getElementById('status-door');
+      const stripBtn = document.getElementById('strip-btn-door');
+      const doorCard = document.getElementById('card-door');
+      const doorSymbol = document.getElementById('icon-door-symbol');
+      const doorBubble = document.getElementById('icon-door-bubble');
+      const peanutOpen = document.getElementById('peanut-btn-open');
+      const peanutClose = document.getElementById('peanut-btn-close');
+
+      const doorTitleEl = document.getElementById('lbl-door-title');
+      if (doorTitleEl) {
+        if (doorBusy) {
+          doorTitleEl.textContent = (doorState === 'open' ? t('door_title_closing') : t('door_title_opening'));
+        } else if (doorState === 'open') {
+          doorTitleEl.textContent = t('door_title_open');
+        } else {
+          doorTitleEl.textContent = t('door_title_closed');
+        }
+      }
+
+      if (peanutOpen && peanutClose) {
+        if (doorBusy) {
+          peanutOpen.classList.remove('active');
+          peanutClose.classList.remove('active');
+          peanutOpen.style.opacity = '0.5';
+          peanutClose.style.opacity = '0.5';
+        } else {
+          peanutOpen.style.opacity = '1';
+          peanutClose.style.opacity = '1';
+          peanutOpen.classList.toggle('active', doorState === 'open');
+          peanutClose.classList.toggle('active', doorState === 'closed');
+        }
+      }
+
+      if (doorBusy) {
+        if (statusBadge) {
+          statusBadge.textContent = (doorState === 'open' ? t('door_status_closing') : t('door_status_opening'));
+          statusBadge.style.background = '#FEF3C7';
+          statusBadge.style.color = '#B45309';
+        }
+        if (doorSymbol) {
+          doorSymbol.className = 'door-moving';
+          doorSymbol.textContent = '🚪';
+        }
+        if (doorBubble) {
+          doorBubble.style.background = 'rgba(217,119,6,0.18)';
+        }
+        if (openBtn) {
+          openBtn.classList.add('btn-disabled');
+          openBtn.textContent = t('door_busy_open');
+        }
+        if (closeBtn) {
+          closeBtn.classList.add('btn-disabled');
+          closeBtn.textContent = t('door_busy_close');
+        }
+        if (stripBtn) {
+          stripBtn.textContent = t('strip_door_moving');
+          stripBtn.style.opacity = '0.6';
+        }
+        return;
+      }
+
+      if (doorState === 'open') {
+        if (doorSymbol) {
+          doorSymbol.className = '';
+          doorSymbol.textContent = '🚪';
+        }
+        if (doorBubble) {
+          doorBubble.style.background = 'rgba(34,197,94,0.18)';
+          doorBubble.style.borderColor = 'rgba(34,197,94,0.45)';
+        }
+        if (doorCard) doorCard.classList.add('card-door-open');
+
+        if (statusBadge) {
+          statusBadge.textContent = t('door_status_open');
+          statusBadge.style.background = '#DCFCE7';
+          statusBadge.style.color = '#15803D';
+        }
+        // Only show close action from open state
+        if (openBtn) {
+          openBtn.style.display = 'none';
+          openBtn.classList.remove('btn-disabled');
+          openBtn.textContent = t('door_btn_open');
+        }
+        if (closeBtn) {
+          closeBtn.style.display = 'flex';
+          closeBtn.classList.remove('btn-disabled');
+          closeBtn.textContent = t('door_btn_close');
+        }
+        if (stripBtn) {
+          stripBtn.textContent = t('strip_door_close');
+          stripBtn.style.background = '#7F1D1D';
+          stripBtn.style.color = '#FCA5A5';
+          stripBtn.style.borderColor = '#991B1B';
+          stripBtn.style.opacity = '1';
+        }
+      } else {
+        // closed state
+        if (doorSymbol) {
+          doorSymbol.className = '';
+          doorSymbol.textContent = '🚪🔒';
+        }
+        if (doorBubble) {
+          doorBubble.style.background = 'rgba(46,90,68,0.1)';
+          doorBubble.style.borderColor = 'rgba(255,255,255,0.85)';
+        }
+        if (doorCard) doorCard.classList.remove('card-door-open');
+
+        if (statusBadge) {
+          statusBadge.textContent = t('door_status_closed');
+          statusBadge.style.background = '#F1F5F9';
+          statusBadge.style.color = '#475569';
+        }
+        // Only show open action from closed state
+        if (openBtn) {
+          openBtn.style.display = 'flex';
+          openBtn.classList.remove('btn-disabled');
+          openBtn.textContent = t('door_btn_open');
+        }
+        if (closeBtn) {
+          closeBtn.style.display = 'none';
+          closeBtn.classList.remove('btn-disabled');
+          closeBtn.textContent = t('door_btn_close');
+        }
+        if (stripBtn) {
+          stripBtn.textContent = t('strip_door_open');
+          stripBtn.style.background = '#14532D';
+          stripBtn.style.color = '#86EFAC';
+          stripBtn.style.borderColor = '#166534';
+          stripBtn.style.opacity = '1';
+        }
+      }
+    }
+
+    function toggleDoorAction() {
+      triggerDoor(doorState === 'open' ? 'close' : 'open');
+    }
+
+    function triggerDoor(action) {
+      if (doorBusy) {
+        showToast(t('toast_door_busy'));
+        return;
+      }
+      if (action === 'open' && doorState === 'open') {
+        showToast(t('toast_door_already_open'));
+        return;
+      }
+      if (action === 'close' && doorState === 'closed') {
+        showToast(t('toast_door_already_closed'));
+        return;
+      }
+
+      doorBusy = true;
+      updateDoorUI();
+
+      if (action === 'open') {
+        showToast(t('toast_door_opening'));
+        setTimeout(() => {
+          doorState = 'open';
+          doorBusy = false;
+          updateDoorUI();
+          broadcastState('ACTUATOR_UPDATE', { door: 'open' });
+          showToast(t('toast_door_open_done'));
+        }, 1500);
+      } else {
+        showToast(t('toast_door_closing'));
+        setTimeout(() => {
+          doorState = 'closed';
+          doorBusy = false;
+          updateDoorUI();
+          broadcastState('ACTUATOR_UPDATE', { door: 'closed' });
+          showToast(t('toast_door_close_done'));
+        }, 1500);
+      }
+    }
+
+    // ── Feeder Lid Dedicated Open / Close Control & Contextual State ──────
+    function controlFeederLid(open) {
+      if (open && feederLidOpen) {
+        showToast(t('toast_feeder_already_open'));
+        return;
+      }
+      if (!open && !feederLidOpen) {
+        showToast(t('toast_feeder_already_closed'));
+        return;
+      }
+      feederLidOpen = open;
+      updateFeederLidUI();
+      broadcastState('ACTUATOR_UPDATE', { feederLidOpen: feederLidOpen });
+      showToast(open ? t('toast_feeder_opened') : t('toast_feeder_closed'));
+    }
+
+    function toggleFeederAction() {
+      controlFeederLid(!feederLidOpen);
+    }
+
+    function updateFeederLidUI() {
+      const feederTitleEl = document.getElementById('lbl-feeder-title');
+      if (feederTitleEl) {
+        feederTitleEl.textContent = feederLidOpen ? t('feeder_title_open') : t('feeder_title_closed');
+      }
+
+      const badge = document.getElementById('badge-feeder-lid');
+      const bOpen = document.getElementById('btn-feeder-open');
+      const bClose = document.getElementById('btn-feeder-close');
+      const stripBtn = document.getElementById('strip-btn-feeder');
+      const feederCard = document.getElementById('card-feeder-lid');
+      const feederSymbol = document.getElementById('icon-feeder-symbol');
+      const feederBubble = document.getElementById('icon-feeder-bubble');
+
+      if (feederLidOpen) {
+        if (feederSymbol) {
+          feederSymbol.className = 'feed-active-anim';
+          feederSymbol.textContent = '🌾';
+        }
+        if (feederBubble) {
+          feederBubble.style.background = 'rgba(217,119,6,0.2)';
+          feederBubble.style.borderColor = 'rgba(217,119,6,0.5)';
+        }
+        if (feederCard) feederCard.classList.add('card-feeder-open');
+
+        if (badge) {
+          badge.textContent = t('feeder_status_open');
+          badge.style.background = '#DCFCE7';
+          badge.style.color = '#15803D';
+        }
+        // Only show close action from open state
+        if (bOpen) {
+          bOpen.style.display = 'none';
+        }
+        if (bClose) {
+          bClose.style.display = 'flex';
+          bClose.className = 'neu-btn neu-btn-danger';
+          bClose.textContent = t('feeder_btn_close');
+        }
+        if (stripBtn) {
+          stripBtn.textContent = t('strip_feeder_close');
+          stripBtn.style.background = '#7F1D1D';
+          stripBtn.style.color = '#FCA5A5';
+          stripBtn.style.borderColor = '#991B1B';
+        }
+      } else {
+        // closed state
+        if (feederSymbol) {
+          feederSymbol.className = '';
+          feederSymbol.textContent = '🔒🌾';
+        }
+        if (feederBubble) {
+          feederBubble.style.background = 'rgba(217,119,6,0.08)';
+          feederBubble.style.borderColor = 'rgba(255,255,255,0.85)';
+        }
+        if (feederCard) feederCard.classList.remove('card-feeder-open');
+
+        if (badge) {
+          badge.textContent = t('feeder_status_closed');
+          badge.style.background = '#F1F5F9';
+          badge.style.color = '#475569';
+        }
+        // Only show open action from closed state
+        if (bOpen) {
+          bOpen.style.display = 'flex';
+          bOpen.className = 'neu-btn';
+          bOpen.textContent = t('feeder_btn_open');
+        }
+        if (bClose) {
+          bClose.style.display = 'none';
+        }
+        if (stripBtn) {
+          stripBtn.textContent = t('strip_feeder_open');
+          stripBtn.style.background = '#1E293B';
+          stripBtn.style.color = '#86EFAC';
+          stripBtn.style.borderColor = '#334155';
+        }
+      }
+    }
+
+    // ── Timed Manure Roller with Countdown (Requirement 5) ───────────────
+    function triggerTimedManure() {
+      if (manureRunning) return;
+      manureRunning = true;
+      manureRemainingSec = manureRunDurationSec;
+
+      const badge = document.getElementById('badge-manure-status');
+      const bRun = document.getElementById('btn-run-manure');
+      const bStop = document.getElementById('btn-stop-manure');
+      const cBox = document.getElementById('manure-countdown-box');
+      const cLbl = document.getElementById('lbl-manure-countdown');
+      const card = document.getElementById('card-manure-roller');
+      const symbol = document.getElementById('icon-manure-symbol');
+
+      if (card) card.classList.add('active-manure');
+      if (symbol) symbol.className = 'roller-scraping';
+
+      if (badge) {
+        badge.textContent = t('manure_status_active');
+        badge.style.background = '#F3E8FF';
+        badge.style.color = '#7E22CE';
+      }
+      if (bRun) bRun.style.display = 'none';
+      if (bStop) bStop.style.display = 'flex';
+      if (cBox) cBox.style.display = 'block';
+      if (cLbl) cLbl.textContent = manureRemainingSec;
+
+      clearInterval(manureCountdownInterval);
+      manureCountdownInterval = setInterval(() => {
+        manureRemainingSec--;
+        if (cLbl) cLbl.textContent = manureRemainingSec;
+        if (manureRemainingSec <= 0) {
+          abortManureRoller(true);
+        }
+      }, 1000);
+
+      broadcastState('ACTUATOR_UPDATE', { manureRunning: true });
+      showToast('♻️ Manure Roller Started: ' + manureRunDurationSec + 's');
+    }
+
+    function abortManureRoller(completed = false) {
+      clearInterval(manureCountdownInterval);
+      manureRunning = false;
+
+      const badge = document.getElementById('badge-manure-status');
+      const bRun = document.getElementById('btn-run-manure');
+      const bStop = document.getElementById('btn-stop-manure');
+      const cBox = document.getElementById('manure-countdown-box');
+      const card = document.getElementById('card-manure-roller');
+      const symbol = document.getElementById('icon-manure-symbol');
+
+      if (card) card.classList.remove('active-manure');
+      if (symbol) symbol.className = '';
+
+      if (badge) {
+        badge.textContent = completed ? t('manure_status_cleaned') : t('manure_status_ready');
+        badge.style.background = '#F1F5F9';
+        badge.style.color = '#475569';
+      }
+      if (bRun) bRun.style.display = 'flex';
+      if (bStop) bStop.style.display = 'none';
+      if (cBox) cBox.style.display = 'none';
+
+      broadcastState('ACTUATOR_UPDATE', { manureRunning: false });
+      showToast(completed ? t('toast_manure_complete') : t('toast_manure_stopped'));
+    }
+
+    function saveManureTimer() {
+      manureRotationTime = document.getElementById('cfg-manure-time').value;
+      manureRunDurationSec = parseInt(document.getElementById('cfg-manure-duration').value) || 30;
+      
+      const lblCfg = document.getElementById('lbl-manure-cfg-time');
+      const lblBtn = document.getElementById('btn-manure-sec-lbl');
+      if (lblCfg) lblCfg.textContent = manureRunDurationSec + ' seconds';
+      if (lblBtn) lblBtn.textContent = manureRunDurationSec;
+
+      markSettingsDirty();
+    }
+
+    // ── Real-Time Lighting Controls (Requirement 2) ──────────────────────
+    function toggleLight(zone) {
+      if (zone === 'in1') {
+        lightIndoor1 = !lightIndoor1;
+        updateLightPill('in1', lightIndoor1);
+        showToast(lightIndoor1 ? '💡 L1 Roosting Perch ON' : '💡 L1 Roosting Perch OFF');
+      } else if (zone === 'in2') {
+        lightIndoor2 = !lightIndoor2;
+        updateLightPill('in2', lightIndoor2);
+        showToast(lightIndoor2 ? '🪺 L2 Nesting Bay ON' : '🪺 L2 Nesting Bay OFF');
+      } else if (zone === 'out') {
+        lightOutdoor = !lightOutdoor;
+        updateLightPill('out', lightOutdoor);
+        showToast(lightOutdoor ? '🔦 L3 Security Flood ON' : '🔦 L3 Security Flood OFF');
+      }
+      broadcastState('ACTUATOR_UPDATE', {
+        lightIn1: lightIndoor1,
+        lightIn2: lightIndoor2,
+        lightOut: lightOutdoor
+      });
+    }
+
+    function updateLightPill(zone, state) {
+      const el = document.getElementById('toggle-light-' + zone);
+      if (el) {
+        el.classList.toggle('on', state);
+        el.classList.toggle('off', !state);
+      }
+      const icon = document.getElementById('icon-light-' + zone);
+      const row = document.getElementById('row-light-' + zone);
+      if (icon) {
+        icon.className = state ? 'light-glow' : 'light-dim';
+      }
+      if (row) {
+        row.classList.toggle('light-row-lit', state);
+      }
+
+      // Master zone lighting icon & badge
+      const anyLit = lightIndoor1 || lightIndoor2 || lightOutdoor;
+      const masterIcon = document.getElementById('icon-light-master');
+      const masterBadge = document.getElementById('badge-lights-live');
+      if (masterIcon) {
+        masterIcon.className = anyLit ? 'tile-icon-bubble light-glow' : 'tile-icon-bubble light-dim';
+        masterIcon.style.background = anyLit ? 'rgba(245,158,11,0.22)' : 'rgba(234,179,8,0.12)';
+      }
+      if (masterBadge) {
+        masterBadge.textContent = anyLit ? t('lights_badge_active') : t('lights_badge_gpio');
+        masterBadge.style.background = anyLit ? '#FEF3C7' : 'var(--moss-light)';
+        masterBadge.style.color = anyLit ? '#B45309' : 'var(--moss-dark)';
+      }
+    }
+
+    function manualLight(zone) {
+      toggleLight(zone);
+    }
+
+    // ── Standalone Climate Exhaust Fan Control ────────────────────────────
+    function toggleActuator(type) {
+      if (type === 'fan') {
+        fanOn = !fanOn;
+        updateFanUI();
+        broadcastState('ACTUATOR_UPDATE', { fanOn: fanOn });
+        showToast(fanOn ? t('toast_fan_on') : t('toast_fan_off'));
+      }
+    }
+
+    function updateFanUI() {
+      const card = document.getElementById('card-fan-widget');
+      const el = document.getElementById('toggle-fan');
+      const badge = document.getElementById('badge-fan-state');
+      const symbol = document.getElementById('icon-fan-symbol');
+
+      if (card) card.classList.toggle('active-fan', fanOn);
+      if (symbol) {
+        symbol.className = fanOn ? 'fan-spinning' : 'fan-still';
+      }
+      if (el) { el.classList.toggle('on', fanOn); el.classList.toggle('off', !fanOn); }
+      if (badge) {
+        badge.textContent = fanOn ? t('fan_badge_on') : t('fan_badge_off');
+        badge.style.background = fanOn ? '#DBEAFE' : '#F1F5F9';
+        badge.style.color = fanOn ? '#1E40AF' : '#475569';
+      }
+    }
+
+    function manualFan() { toggleActuator('fan'); }
+
+    // ── Standalone Chick Brooder Nursery Control ──────────────────────────
+    function toggleChickHeat() {
+      chickHeat = !chickHeat;
+      updateChickHeatUI();
+      broadcastState('ACTUATOR_UPDATE', { chickHeat: chickHeat });
+      showToast(chickHeat ? t('toast_chick_on') : t('toast_chick_off'));
+    }
+
+    function updateChickHeatUI() {
+      const card = document.getElementById('card-chick');
+      const pill = document.getElementById('toggle-chick-pill');
+      const badge = document.getElementById('badge-chick');
+      const sub = document.getElementById('sub-chick');
+
+      if (pill) { pill.classList.toggle('on', chickHeat); pill.classList.toggle('off', !chickHeat); }
+      if (card) card.classList.toggle('active-chick', chickHeat);
+      if (badge) {
+        badge.textContent = chickHeat ? t('chick_badge_on') : t('chick_badge_off');
+        badge.style.background = chickHeat ? '#FEF3C7' : '#F1F5F9';
+        badge.style.color = chickHeat ? '#B45309' : '#475569';
+      }
+      if (sub) sub.textContent = chickHeat ? t('chick_sub_on') : t('chick_sub_off');
+    }
+
+    function togglePredatorGuard() {
+      predatorGuard = !predatorGuard;
+      const card = document.getElementById('card-predator-guard');
+      const pill = document.getElementById('toggle-predator-pill');
+      if (pill) { pill.classList.toggle('on', predatorGuard); pill.classList.toggle('off', !predatorGuard); }
+      if (card) card.classList.toggle('active-predator', predatorGuard);
+      broadcastState('ACTUATOR_UPDATE', { predatorGuard: predatorGuard });
+      showToast(predatorGuard ? t('toast_predator_on') : t('toast_predator_off'));
+    }
+
+    // ── Daily Egg Count Logger ───────────────────────────────────────────
+    function triggerEggPop() {
+      const inputEl = document.getElementById('input-eggs');
+      if (inputEl) {
+        inputEl.classList.remove('pop-anim');
+        void inputEl.offsetWidth; // Force CSS reflow to re-trigger micro-animation
+        inputEl.classList.add('pop-anim');
+      }
+    }
+
+    function changeEggs(delta) {
+      eggsToday = Math.max(0, Math.min(99999, eggsToday + delta));
+      const inputEl = document.getElementById('input-eggs');
+      if (inputEl) inputEl.value = eggsToday;
+      triggerEggPop();
+      broadcastState('EGGS_UPDATE', eggsToday);
+      try { localStorage.setItem('coopsense_eggs_today', eggsToday); } catch(e) {}
+      calculateFinances();
+    }
+
+    function setEggs(val) {
+      const num = parseInt(String(val).replace(/[^0-9]/g, ''), 10);
+      eggsToday = isNaN(num) ? 0 : Math.min(99999, Math.max(0, num));
+      const inputEl = document.getElementById('input-eggs');
+      if (inputEl && inputEl.value !== String(eggsToday) && val !== '') {
+        inputEl.value = eggsToday;
+      }
+      triggerEggPop();
+      broadcastState('EGGS_UPDATE', eggsToday);
+      try { localStorage.setItem('coopsense_eggs_today', eggsToday); } catch(e) {}
+      calculateFinances();
+    }
+
+    // ── Feeder Slots Dynamic Schedule ────────────────────────────────────
+    let feederSlots = [
+      { open: '06:00', close: '08:00' },
+      { open: '11:30', close: '13:00' },
+      { open: '16:00', close: '18:30' }
+    ];
+
+    function renderFeederSlots() {
+      const list = document.getElementById('feeder-slots-list');
+      if (!list) return;
+      list.innerHTML = '';
+      feederSlots.forEach(function(slot, i) {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:end; background:#F8FAFC; border:1px solid var(--border); border-radius:12px; padding:10px 12px;';
+        row.innerHTML = `
+          <div>
+            <label style="font-size:10px; font-weight:800; color:var(--muted); display:block; margin-bottom:4px;">🔓 OPEN</label>
+            <input type="time" class="input-box" style="width:100%; margin:0;" value="${slot.open}" onchange="updateFeederSlot(${i}, 'open', this.value)" />
+          </div>
+          <div>
+            <label style="font-size:10px; font-weight:800; color:var(--muted); display:block; margin-bottom:4px;">🔒 CLOSE</label>
+            <input type="time" class="input-box" style="width:100%; margin:0;" value="${slot.close}" onchange="updateFeederSlot(${i}, 'close', this.value)" />
+          </div>
+          <button onclick="removeFeederSlot(${i})" style="background:#FEE2E2; color:#B91C1C; border:1px solid #FECACA; border-radius:10px; width:34px; height:34px; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; flex-shrink:0;">×</button>
+        `;
+        list.appendChild(row);
+      });
+
+      // Update schedule hint in dashboard
+      const hint = document.getElementById('lbl-feeder-schedule-hint');
+      if (hint) {
+        hint.textContent = feederSlots.map(s => s.open + '–' + s.close).join(', ') || 'No active slots';
+      }
+    }
+
+    function addFeederSlot() {
+      if (feederSlots.length >= 6) {
+        showToast('⚠️ Maximum 6 feeding slots per day');
+        return;
+      }
+      feederSlots.push({ open: '07:00', close: '08:00' });
+      renderFeederSlots();
+      markSettingsDirty();
+    }
+
+    function removeFeederSlot(index) {
+      feederSlots.splice(index, 1);
+      renderFeederSlots();
+      markSettingsDirty();
+    }
+
+    function updateFeederSlot(index, field, value) {
+      feederSlots[index][field] = value;
+      markSettingsDirty();
+    }
+
+    // ── Azolla Harvester (When enabled) ──────────────────────────────────
+    let azollaRunning = false;
+    let azollaInterval = null;
+    let azollaRemainingSec = 90;
+
+    function triggerAzollaHarvest() {
+      if (azollaRunning) return;
+      azollaRunning = true;
+      azollaRemainingSec = azollaSkimDurationSec || 90;
+
+      const bRun = document.getElementById('btn-run-azolla');
+      const bStop = document.getElementById('btn-stop-azolla');
+      const cBox = document.getElementById('azolla-countdown-box');
+      const cLbl = document.getElementById('lbl-azolla-countdown');
+
+      if (bRun) bRun.style.display = 'none';
+      if (bStop) bStop.style.display = 'inline-flex';
+      if (cBox) cBox.style.display = 'block';
+      if (cLbl) cLbl.textContent = azollaRemainingSec;
+
+      showToast(t('toast_azolla_started'));
+
+      clearInterval(azollaInterval);
+      azollaInterval = setInterval(() => {
+        azollaRemainingSec--;
+        if (cLbl) cLbl.textContent = azollaRemainingSec;
+        if (azollaRemainingSec <= 0) {
+          abortAzollaHarvest(true);
+        }
+      }, 1000);
+    }
+
+    function abortAzollaHarvest(completed = false) {
+      azollaRunning = false;
+      clearInterval(azollaInterval);
+
+      const bRun = document.getElementById('btn-run-azolla');
+      const bStop = document.getElementById('btn-stop-azolla');
+      const cBox = document.getElementById('azolla-countdown-box');
+
+      if (bRun) bRun.style.display = 'inline-flex';
+      if (bStop) bStop.style.display = 'none';
+      if (cBox) cBox.style.display = 'none';
+
+      showToast(completed ? t('toast_azolla_complete') : t('toast_azolla_stopped'));
+    }
+
+    function saveAzollaTimers() {
+      azollaHarvestTime = document.getElementById('cfg-azolla-time').value;
+      azollaSkimDurationSec = parseInt(document.getElementById('cfg-azolla-duration').value) || 90;
+      markSettingsDirty();
+    }
+
+    // ── Finances Engine: Monthly Expenses FIRST, Then Overall (Req 8) ─────
+    let currentFinanceView = 'monthly'; // Monthly first!
+    function switchFinanceView(mode) {
+      currentFinanceView = mode;
+      const vMonthly = document.getElementById('view-monthly-finances');
+      const vOverall = document.getElementById('view-overall-finances');
+      const bMonthly = document.getElementById('btn-view-monthly');
+      const bOverall = document.getElementById('btn-view-overall');
+
+      if (mode === 'monthly') {
+        if (vMonthly) vMonthly.style.display = 'block';
+        if (vOverall) vOverall.style.display = 'none';
+        if (bMonthly) {
+          bMonthly.classList.add('active');
+          bMonthly.style.background = '';
+          bMonthly.style.color = '';
+          bMonthly.style.boxShadow = '';
+        }
+        if (bOverall) {
+          bOverall.classList.remove('active');
+          bOverall.style.background = '';
+          bOverall.style.color = '';
+          bOverall.style.boxShadow = '';
+        }
+      } else {
+        if (vMonthly) vMonthly.style.display = 'none';
+        if (vOverall) vOverall.style.display = 'block';
+        if (bOverall) {
+          bOverall.classList.add('active');
+          bOverall.style.background = '';
+          bOverall.style.color = '';
+          bOverall.style.boxShadow = '';
+        }
+        if (bMonthly) {
+          bMonthly.classList.remove('active');
+          bMonthly.style.background = '';
+          bMonthly.style.color = '';
+          bMonthly.style.boxShadow = '';
+        }
+      }
+    }
+
+    // ── Interactive Transaction Ledger ───────────────────────────────────
+    let currentTxType = 'income';
+    let txFilter = 'all';
+
+    const txCategories = {
+      income: [
+        '🥚 Egg Sales (Cartons/Trays)',
+        '🐔 Cull Bird / Meat Sales',
+        '💩 Organic Manure / Compost',
+        '📦 Other Farm Revenue'
+      ],
+      expense: [
+        '🐥 Chicks / Pullets Purchase',
+        '🌾 Layer Mash & Grain Feed',
+        '🪵 Pine Shavings & Bedding',
+        '💊 Vaccines, Meds & Vitamins',
+        '💡 Electricity & Utilities',
+        '🛠️ DIY Hardware & Spares',
+        '📦 Misc Farm Consumables'
+      ]
+    };
+
+    const categoryTranslations = {
+      '🥚 Egg Sales (Cartons/Trays)': '🥚 മുട്ട വിൽപ്പന',
+      '🐔 Cull Bird / Meat Sales': '🐔 കോഴി / ഇറച്ചി വിൽപ്പന',
+      '💩 Organic Manure / Compost': '💩 കാഷ്ഠം / വളം വിൽപ്പന',
+      '📦 Other Farm Revenue': '📦 മറ്റ് വരുമാനം',
+      '🐥 Chicks / Pullets Purchase': '🐥 കോഴിക്കുഞ്ഞുങ്ങൾ വാങ്ങൽ',
+      '🌾 Layer Mash & Grain Feed': '🌾 കോഴിത്തീറ്റ & ധാന്യങ്ങൾ',
+      '🪵 Pine Shavings & Bedding': '🪵 അറക്കപ്പൊടി / ബെഡ്ഡിംഗ്',
+      '💊 Vaccines, Meds & Vitamins': '💊 മരുന്നുകൾ & വാക്സിൻ',
+      '💡 Electricity & Utilities': '💡 കറണ്ട് ചാർജ്ജ്',
+      '🛠️ DIY Hardware & Spares': '🛠️ ഉപകരണങ്ങൾ & റിപ്പയർ',
+      '📦 Misc Farm Consumables': '📦 മറ്റ് ചിലവുകൾ'
+    };
+
+    function getCategoryLabel(cat) {
+      if (currentLang === 'ml' && categoryTranslations[cat]) {
+        return categoryTranslations[cat];
+      }
+      return cat;
+    }
+
+    const defaultTransactions = [
+      { id: 1, type: 'income', cat: '🥚 Egg Sales (Cartons/Trays)', desc: 'October egg sales to retail mart', amt: 19000, date: '2026-10-31' },
+      { id: 2, type: 'expense', cat: '🌾 Layer Mash & Grain Feed', desc: '2 bags Grower / Layer Mash (100kg)', amt: 5400, date: '2026-10-26' },
+      { id: 3, type: 'expense', cat: '🪵 Pine Shavings & Bedding', desc: 'Baled kiln-dried pine bedding', amt: 1650, date: '2026-10-18' },
+      { id: 4, type: 'expense', cat: '💡 Electricity & Utilities', desc: 'Brooder SSR & lighting electricity', amt: 800, date: '2026-10-12' },
+      { id: 5, type: 'income', cat: '💩 Organic Manure / Compost', desc: '4 sacks aged hen manure to garden', amt: 1800, date: '2026-10-05' }
+    ];
+
+    let transactions = [];
+    try {
+      const stored = localStorage.getItem('coopsense_transactions');
+      transactions = (stored !== null) ? JSON.parse(stored) : defaultTransactions;
+    } catch(e) {
+      transactions = defaultTransactions;
+    }
+
+    function openTxModal() {
+      const modal = document.getElementById('modal-tx');
+      if (!modal) return;
+      modal.style.display = 'flex';
+      setTxType('income');
+      document.getElementById('tx-amount').value = '';
+      document.getElementById('tx-desc').value = '';
+      document.getElementById('tx-date').value = new Date().toISOString().split('T')[0];
+    }
+
+    function closeTxModal() {
+      const modal = document.getElementById('modal-tx');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function setTxType(type) {
+      currentTxType = type;
+      const bInc = document.getElementById('btn-tx-type-inc');
+      const bExp = document.getElementById('btn-tx-type-exp');
+      const selCat = document.getElementById('tx-category');
+
+      if (type === 'income') {
+        bInc.style.border = '2px solid var(--moss)';
+        bInc.style.background = 'var(--moss-light)';
+        bInc.style.color = 'var(--moss)';
+        bExp.style.border = '2px solid transparent';
+        bExp.style.background = 'rgba(0,0,0,0.04)';
+        bExp.style.color = 'var(--text-muted)';
+      } else {
+        bExp.style.border = '2px solid var(--terracotta)';
+        bExp.style.background = 'rgba(229,62,62,0.12)';
+        bExp.style.color = 'var(--terracotta)';
+        bInc.style.border = '2px solid transparent';
+        bInc.style.background = 'rgba(0,0,0,0.04)';
+        bInc.style.color = 'var(--text-muted)';
+      }
+
+      if (selCat) {
+        selCat.innerHTML = '';
+        txCategories[type].forEach(cat => {
+          const opt = document.createElement('option');
+          opt.value = cat;
+          opt.textContent = getCategoryLabel(cat);
+          selCat.appendChild(opt);
+        });
+      }
+    }
+
+    function saveTransaction() {
+      const amtInput = document.getElementById('tx-amount');
+      const amt = parseFloat(amtInput.value);
+      if (isNaN(amt) || amt <= 0) {
+        showToast('⚠️ Please enter a valid amount in Rupees (₹)');
+        amtInput.focus();
+        return;
+      }
+
+      const cat = document.getElementById('tx-category').value;
+      const date = document.getElementById('tx-date').value || new Date().toISOString().split('T')[0];
+      const desc = document.getElementById('tx-desc').value.trim() || cat;
+
+      const newTx = {
+        id: Date.now(),
+        type: currentTxType,
+        cat: cat,
+        desc: desc,
+        amt: Math.round(amt),
+        date: date
+      };
+
+      transactions.unshift(newTx);
+      try {
+        localStorage.setItem('coopsense_transactions', JSON.stringify(transactions));
+      } catch(e) {}
+
+      closeTxModal();
+      calculateFinances();
+      renderTransactions();
+      broadcastState('TRANSACTION_LOGGED', newTx);
+      showToast('💾 Transaction saved: ₹' + newTx.amt.toLocaleString('en-IN'));
+    }
+
+    function deleteTransaction(id) {
+      transactions = transactions.filter(t => t.id !== id);
+      try {
+        localStorage.setItem('coopsense_transactions', JSON.stringify(transactions));
+      } catch(e) {}
+      calculateFinances();
+      renderTransactions();
+      broadcastState('TRANSACTION_LOGGED', { deleted: id });
+      showToast('🗑️ Transaction deleted');
+    }
+
+    function filterTransactions(f) {
+      txFilter = f;
+      ['all','inc','exp'].forEach(k => {
+        const btn = document.getElementById('filter-tx-' + k);
+        if (btn) {
+          if ((k==='all'&&f==='all') || (k==='inc'&&f==='income') || (k==='exp'&&f==='expense')) {
+            btn.style.background = 'var(--moss)';
+            btn.style.color = '#FFF';
+          } else {
+            btn.style.background = '#FFF';
+            btn.style.color = 'var(--muted)';
+          }
+        }
+      });
+      renderTransactions();
+    }
+
+    function renderTransactions() {
+      const list = document.getElementById('tx-history-list');
+      if (!list) return;
+      list.innerHTML = '';
+
+      const filtered = transactions.filter(t => {
+        if (txFilter === 'income') return t.type === 'income';
+        if (txFilter === 'expense') return t.type === 'expense';
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        list.innerHTML = (currentLang === 'ml')
+          ? '<div style="text-align:center; padding:18px; font-size:11px; color:var(--text-muted);">ഇടപാടുകൾ ഒന്നും രേഖപ്പെടുത്തിയിട്ടില്ല.<br>പുതിയത് ചേർക്കാൻ <strong>＋ ചേർക്കുക</strong> അമർത്തുക.</div>'
+          : '<div style="text-align:center; padding:18px; font-size:11px; color:var(--text-muted);">No transactions in this view.<br>Tap <strong>＋ Log</strong> to add one.</div>';
+        return;
+      }
+
+      filtered.forEach(t => {
+        const row = document.createElement('div');
+        const isInc = t.type === 'income';
+        row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 12px; gap:8px; box-shadow:var(--neu-flat-xs);';
+        row.innerHTML = `
+          <div style="display:flex; align-items:center; gap:10px; overflow:hidden;">
+            <div style="width:34px; height:34px; border-radius:10px; background:${isInc ? 'rgba(56,161,105,0.1)' : 'rgba(229,62,62,0.1)'}; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0;">
+              ${isInc ? '🟢' : '🔴'}
+            </div>
+            <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+              <div style="font-size:12px; font-weight:800; color:var(--text); text-overflow:ellipsis; overflow:hidden;">${t.desc}</div>
+              <div style="font-size:10px; color:var(--text-muted);">${t.date} • ${getCategoryLabel(t.cat)}</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+            <strong style="font-size:13px; font-weight:900; color:${isInc ? 'var(--moss)' : 'var(--terracotta)'};">
+              ${isInc ? '+' : '-'}₹${Number(t.amt).toLocaleString('en-IN')}
+            </strong>
+            <button onclick="deleteTransaction(${t.id})" title="Delete" style="border:none; background:transparent; color:var(--text-muted); font-size:14px; cursor:pointer; padding:4px;">🗑️</button>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    function calculateFinances() {
+      const isMl = (currentLang === 'ml');
+      const unitTrays = isMl ? 'ട്രേ' : 'Trays';
+
+      let loggedIncome = 0;
+      let loggedExpense = 0;
+      let chickCapEx = 0;
+      let buildCapEx = 0;
+      let feedExpense = 0;
+      let beddingExpense = 0;
+      let powerExpense = 0;
+      let eggsFromSales = 0;
+
+      transactions.forEach(t => {
+        const amt = Number(t.amt) || 0;
+        const cat = t.cat || '';
+        if (t.type === 'income') {
+          loggedIncome += amt;
+          if (cat.includes('Egg') || cat.includes('മുട്ട')) {
+            // Standard farmgate / retail egg average ~₹6.5 per egg
+            eggsFromSales += Math.round(amt / 6.5);
+          }
+        } else {
+          loggedExpense += amt;
+          if (cat.includes('Chicks') || cat.includes('Pullets') || cat.includes('കുഞ്ഞുങ്ങൾ')) {
+            chickCapEx += amt;
+          } else if (cat.includes('Hardware') || cat.includes('Build') || cat.includes('Spares') || cat.includes('ഉപകരണങ്ങൾ')) {
+            buildCapEx += amt;
+          } else if (cat.includes('Feed') || cat.includes('Mash') || cat.includes('Grain') || cat.includes('തീറ്റ')) {
+            feedExpense += amt;
+          } else if (cat.includes('Bedding') || cat.includes('Pine') || cat.includes('ബെഡ്ഡിംഗ്') || cat.includes('അറക്കപ്പൊടി')) {
+            beddingExpense += amt;
+          } else if (cat.includes('Electricity') || cat.includes('Utilities') || cat.includes('കറണ്ട്')) {
+            powerExpense += amt;
+          }
+        }
+      });
+
+      const totalCapEx = buildCapEx + chickCapEx;
+      const overallCumulativeOpEx = Math.max(0, loggedExpense - totalCapEx);
+      const overallGrossRevenue = loggedIncome;
+      const overallNetProfit = overallGrossRevenue - loggedExpense;
+
+      // Update Breakdown DOM with actual logged category costs
+      const elChickCost = document.getElementById('cost-chick-capex');
+      if (elChickCost) elChickCost.textContent = '₹' + Math.round(chickCapEx).toLocaleString('en-IN');
+      const elBuildCost = document.getElementById('cost-build-capex');
+      if (elBuildCost) elBuildCost.textContent = '₹' + Math.round(buildCapEx).toLocaleString('en-IN');
+      const elLifeCapex = document.getElementById('life-capex');
+      if (elLifeCapex) elLifeCapex.textContent = '₹' + Math.round(totalCapEx).toLocaleString('en-IN');
+      const elFeed = document.getElementById('cost-feed-total');
+      if (elFeed) elFeed.textContent = '₹' + Math.round(feedExpense).toLocaleString('en-IN');
+      const elBedding = document.getElementById('cost-bedding-total');
+      if (elBedding) elBedding.textContent = '₹' + Math.round(beddingExpense).toLocaleString('en-IN');
+      const elPower = document.getElementById('cost-power-total');
+      if (elPower) elPower.textContent = '₹' + Math.round(powerExpense).toLocaleString('en-IN');
+
+      // Overall egg production calculations
+      const storedCumulativeEggs = parseInt(localStorage.getItem('coopsense_cumulative_eggs') || '0', 10);
+      const lifetimeEggs = Math.max(eggsFromSales, storedCumulativeEggs, eggsToday);
+      const lifetimeTrays = Math.floor(lifetimeEggs / 30);
+      const minDailyLay = Math.round(totalHens * 0.65);
+      const maxDailyLay = Math.round(totalHens * 0.92);
+
+      const elLifeEggs = document.getElementById('val-overall-lifetime-eggs');
+      if (elLifeEggs) elLifeEggs.textContent = lifetimeEggs.toLocaleString('en-IN');
+      const elLifeTrays = document.getElementById('val-overall-trays');
+      if (elLifeTrays) elLifeTrays.textContent = lifetimeTrays.toLocaleString('en-IN') + ' ' + unitTrays;
+
+      function formatEggUnit(count) {
+        if (isMl) return 'മുട്ട';
+        return count === 1 ? 'Egg' : 'Eggs';
+      }
+
+      const elMinLay = document.getElementById('stat-overall-min-lay');
+      if (elMinLay) elMinLay.textContent = minDailyLay.toLocaleString('en-IN') + ' ' + formatEggUnit(minDailyLay);
+      const elMaxLay = document.getElementById('stat-overall-max-lay');
+      if (elMaxLay) elMaxLay.textContent = maxDailyLay.toLocaleString('en-IN') + ' ' + formatEggUnit(maxDailyLay);
+      const elOverallFlock = document.getElementById('stat-overall-flock-hens');
+      if (elOverallFlock) elOverallFlock.textContent = totalHens.toLocaleString('en-IN');
+
+      // Monthly egg production scaling
+      // Weekly bars are 0 by default unless logged in weekly history
+      const storedWeekly = (() => {
+        try {
+          const s = localStorage.getItem('coopsense_weekly_eggs');
+          return s ? JSON.parse(s) : null;
+        } catch(e) { return null; }
+      })();
+
+      const w1 = storedWeekly && storedWeekly.w1 ? Number(storedWeekly.w1) : 0;
+      const w2 = storedWeekly && storedWeekly.w2 ? Number(storedWeekly.w2) : 0;
+      const w3 = storedWeekly && storedWeekly.w3 ? Number(storedWeekly.w3) : 0;
+      const w4 = storedWeekly && storedWeekly.w4 ? Number(storedWeekly.w4) : 0;
+      const todayEggs = eggsToday;
+
+      const elW1 = document.getElementById('bar-val-w1');
+      if (elW1) elW1.textContent = w1.toLocaleString('en-IN');
+      const elW2 = document.getElementById('bar-val-w2');
+      if (elW2) elW2.textContent = w2.toLocaleString('en-IN');
+      const elW3 = document.getElementById('bar-val-w3');
+      if (elW3) elW3.textContent = w3.toLocaleString('en-IN');
+      const elW4 = document.getElementById('bar-val-w4');
+      if (elW4) elW4.textContent = w4.toLocaleString('en-IN');
+      const elToday = document.getElementById('bar-val-today');
+      if (elToday) elToday.textContent = todayEggs.toLocaleString('en-IN');
+
+      // Update Bar visual heights dynamically
+      const maxBarVal = Math.max(w1, w2, w3, w4, todayEggs, 1);
+      const updateBarHeight = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.style.height = (val === 0) ? '0%' : Math.min(100, Math.max(8, Math.round((val / maxBarVal) * 85))) + '%';
+        }
+      };
+      updateBarHeight('bar-el-w1', w1);
+      updateBarHeight('bar-el-w2', w2);
+      updateBarHeight('bar-el-w3', w3);
+      updateBarHeight('bar-el-w4', w4);
+      updateBarHeight('bar-el-today', todayEggs);
+
+      const monthEggs = w1 + w2 + w3 + w4 + todayEggs;
+      const dailyAvg = (monthEggs > 0) ? (monthEggs / 30).toFixed(1) : '0';
+      const elDailyAvg = document.getElementById('stat-daily-avg');
+      if (elDailyAvg) elDailyAvg.textContent = dailyAvg;
+      const elMonthEggs = document.getElementById('stat-month-eggs');
+      if (elMonthEggs) elMonthEggs.textContent = monthEggs.toLocaleString('en-IN');
+      const elFlockHens = document.getElementById('stat-flock-hens');
+      if (elFlockHens) elFlockHens.textContent = totalHens.toLocaleString('en-IN');
+
+      const layRatePct = (totalHens > 0 && todayEggs > 0) ? Math.min(100, Math.round((todayEggs / totalHens) * 100)) : 0;
+      const elBadgeLay = document.getElementById('badge-lay-rate');
+      if (elBadgeLay) elBadgeLay.textContent = layRatePct + (isMl ? '% ഉത്പാദനം' : '% Lay Rate');
+
+      const overallLayRatePct = (totalHens > 0 && lifetimeEggs > 0) ? Math.min(100, Math.round((lifetimeEggs / (totalHens * 30)) * 100)) : 0;
+      const elOverallBadgeLay = document.getElementById('badge-overall-lay-rate');
+      if (elOverallBadgeLay) elOverallBadgeLay.textContent = overallLayRatePct + (isMl ? '% ശരാശരി' : '% All-Time Avg');
+
+      // Overall ROI and capital recovery
+      let overallROI = 0;
+      let capitalRecoveredPct = 0;
+      if (totalCapEx > 0) {
+        overallROI = Math.round((overallNetProfit / totalCapEx) * 100);
+        capitalRecoveredPct = Math.min(100, Math.max(0, Math.round(((overallGrossRevenue - overallCumulativeOpEx) / totalCapEx) * 100)));
+      }
+
+      // Update Overall DOM
+      const valOverallNet = document.getElementById('val-overall-net');
+      if (valOverallNet) {
+        if (overallNetProfit === 0) {
+          valOverallNet.textContent = '₹0';
+          valOverallNet.style.color = 'var(--text)';
+        } else {
+          valOverallNet.textContent = (overallNetProfit > 0 ? '+₹' : '-₹') + Math.abs(Math.round(overallNetProfit)).toLocaleString('en-IN');
+          valOverallNet.style.color = overallNetProfit > 0 ? 'var(--moss-dark)' : 'var(--terracotta)';
+        }
+      }
+      const lifeRev = document.getElementById('life-revenue');
+      if (lifeRev) lifeRev.textContent = '₹' + Math.round(overallGrossRevenue).toLocaleString('en-IN');
+      const lifeCost = document.getElementById('life-cost');
+      if (lifeCost) lifeCost.textContent = '₹' + Math.round(overallCumulativeOpEx).toLocaleString('en-IN');
+      const roiBadge = document.getElementById('badge-overall-roi');
+      if (roiBadge) {
+        if (totalCapEx === 0) {
+          roiBadge.textContent = (isMl ? 'ലാഭം: ' : 'ROI: ') + (overallNetProfit > 0 ? '+' : '') + (overallNetProfit !== 0 ? Math.round(overallNetProfit) : '0%');
+          roiBadge.style.color = overallNetProfit === 0 ? 'var(--text-muted)' : (overallNetProfit > 0 ? 'var(--moss)' : 'var(--terracotta)');
+        } else {
+          roiBadge.textContent = (isMl ? 'ലാഭം: ' : 'ROI: ') + (overallROI >= 0 ? '+' : '') + overallROI + '%';
+          roiBadge.style.color = overallROI >= 0 ? 'var(--moss)' : 'var(--terracotta)';
+        }
+      }
+      const barBreakeven = document.getElementById('bar-breakeven');
+      const lblBreakeven = document.getElementById('lbl-breakeven-pct');
+      if (barBreakeven) barBreakeven.style.width = capitalRecoveredPct + '%';
+      if (lblBreakeven) {
+        if (totalCapEx === 0) {
+          lblBreakeven.textContent = isMl ? '0% ലഭിച്ചു' : '0% Recovered';
+        } else if (capitalRecoveredPct >= 100) {
+          lblBreakeven.textContent = isMl ? '100% മുതൽമുടക്ക് നേടി' : '100% Fully Recovered';
+        } else {
+          lblBreakeven.textContent = capitalRecoveredPct + (isMl ? '% ലഭിച്ചു' : '% Recovered');
+        }
+      }
+
+      // Monthly calculations strictly from logged transactions
+      const monthlyInc = loggedIncome;
+      const monthlyExp = loggedExpense;
+      const monthlyNet = monthlyInc - monthlyExp;
+
+      const vInc = document.getElementById('val-total-inc');
+      if (vInc) vInc.textContent = '₹' + Math.round(monthlyInc).toLocaleString('en-IN');
+      const vExp = document.getElementById('val-total-exp');
+      if (vExp) vExp.textContent = '₹' + Math.round(monthlyExp).toLocaleString('en-IN');
+      const vNet = document.getElementById('val-net-profit');
+      if (vNet) {
+        if (monthlyNet === 0) {
+          vNet.textContent = '₹0';
+          vNet.style.color = 'var(--text)';
+        } else {
+          vNet.textContent = (monthlyNet > 0 ? '+₹' : '-₹') + Math.abs(Math.round(monthlyNet)).toLocaleString('en-IN');
+          vNet.style.color = monthlyNet > 0 ? 'var(--moss-dark)' : 'var(--terracotta)';
+        }
+      }
+    }
+
+    function reloadTransactionsFromStorage() {
+      try {
+        const stored = localStorage.getItem('coopsense_transactions');
+        if (stored) {
+          transactions = JSON.parse(stored);
+          calculateFinances();
+          renderTransactions();
+        }
+      } catch(e) {}
+    }
+
+    // ── ESP32 Hardware Status Polling & Real-Time Sync ───────────────────
+    function pollHardwareStatus() {
+      // Fetches http://${espIP}/api/status when ESP32 is deployed
+      if (window._isLiveESP) {
+        fetch(`http://${espIP}/api/status`, { cache: 'no-store' })
+          .then(res => {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+          })
+          .then(data => {
+            updateEspStatus(true);
+            applyHardwarePayload(data);
+          })
+          .catch(err => {
+            updateEspStatus(false);
+            console.warn('ESP32 poll offline fallback');
+          });
+      } else {
+        updateEspStatus(true);
+      }
+    }
+
+    function applyHardwarePayload(data) {
+      if (!data) return;
+      if (data.temp !== undefined) {
+        curTemp = data.temp;
+        document.getElementById('val-temp').textContent = curTemp.toFixed(1) + '°C';
+      }
+      if (data.humidity !== undefined) {
+        curHumidity = data.humidity;
+        document.getElementById('val-humidity').textContent = '/ ' + curHumidity.toFixed(0) + '% RH';
+      }
+      // Real-time GPIO readback for lights
+      if (data.lightIn1 !== undefined) {
+        lightIndoor1 = !!data.lightIn1;
+        updateLightPill('in1', lightIndoor1);
+      }
+      if (data.lightIn2 !== undefined) {
+        lightIndoor2 = !!data.lightIn2;
+        updateLightPill('in2', lightIndoor2);
+      }
+      if (data.lightOut !== undefined) {
+        lightOutdoor = !!data.lightOut;
+        updateLightPill('out', lightOutdoor);
+      }
+      if (data.feederLidOpen !== undefined) {
+        feederLidOpen = !!data.feederLidOpen;
+        updateFeederLidUI();
+      }
+      if (data.door !== undefined) {
+        doorState = data.door;
+        updateDoorUI();
+      }
+      if (data.fanOn !== undefined) {
+        fanOn = !!data.fanOn;
+        updateFanUI();
+      }
+      if (data.chickHeat !== undefined) {
+        chickHeat = !!data.chickHeat;
+        updateChickHeatUI();
+      }
+    }
+
+    function markSettingsDirty() {
+      settingsDirty = true;
+      const b = document.getElementById('esp-sync-banner');
+      if (b) b.style.display = 'block';
+      const s = document.getElementById('esp-sync-status');
+      if (s) {
+        s.textContent = '⚠️ Unsynced';
+        s.style.color = 'var(--terracotta)';
+        s.style.background = 'rgba(239, 68, 68, 0.12)';
+      }
+    }
+
+    function syncToESP() {
+      const statusEl = document.getElementById('esp-sync-status');
+      const bannerEl = document.getElementById('esp-sync-banner');
+      if (statusEl) {
+        statusEl.textContent = '⏳ Syncing…';
+        statusEl.style.color = '#B45309';
+        statusEl.style.background = 'rgba(245, 158, 11, 0.12)';
+      }
+      
+      setTimeout(() => {
+        settingsDirty = false;
+        if (statusEl) {
+          statusEl.textContent = '✅ Synced';
+          statusEl.style.color = 'var(--moss)';
+          statusEl.style.background = 'rgba(34, 197, 94, 0.12)';
+        }
+        if (bannerEl) bannerEl.style.display = 'none';
+        const syncLbl = document.getElementById('lbl-last-sync');
+        if (syncLbl) syncLbl.textContent = new Date().toLocaleTimeString();
+        broadcastState('SETTINGS_UPDATE', { synced: true, timestamp: Date.now() });
+        lockSettings();
+      }, 700);
+    }
+
+    function saveLightTimers() {
+      lightIndoorOnTime = document.getElementById('cfg-light-in-on').value;
+      lightIndoorOffTime = document.getElementById('cfg-light-in-off').value;
+      lightOutdoorOnTime = document.getElementById('cfg-light-out-on').value;
+      lightOutdoorOffTime = document.getElementById('cfg-light-out-off').value;
+      markSettingsDirty();
+    }
+
+    function changeFlockCount(delta) {
+      const newCount = Math.max(0, totalHens + delta);
+      updateFlockCount(newCount);
+    }
+
+    function updateFlockCount(val) {
+      const num = parseInt(String(val).replace(/[^0-9]/g, ''), 10);
+      totalHens = isNaN(num) || num < 0 ? 0 : Math.min(99999, num);
+      
+      const inputEl = document.getElementById('cfg-hen-count');
+      if (inputEl && inputEl.value !== String(totalHens) && val !== '') {
+        inputEl.value = totalHens;
+      }
+      const formatted = totalHens.toLocaleString('en-IN');
+      const lblFlock = document.getElementById('lbl-flock-count');
+      if (lblFlock) lblFlock.textContent = formatted;
+      const statFlock = document.getElementById('stat-flock-hens');
+      if (statFlock) statFlock.textContent = formatted;
+      const valFlock = document.getElementById('val-flock-count');
+      if (valFlock) valFlock.textContent = formatted;
+      
+      try {
+        localStorage.setItem('coopsense_flock_count', totalHens);
+      } catch(e) {}
+      
+      calculateFinances();
+      markSettingsDirty();
+    }
+
+    function recalculateLayRate() {
+      calculateFinances();
+    }
+
+    function openCam(name) {
+      showToast('📹 Opening RTSP stream for ' + name + ' (rtsp://' + espIP + ':8554/live)');
+    }
+
+    // ── Toast Helper (Popups disabled completely per user requirement) ───
+    function showToast(msg) {
+      return;
+    }
+
+    // ── Storage Event Listener for multi-window sync ─────────────────────
+    window.addEventListener('storage', (e) => {
+      try {
+        if (e.key === 'coopsense_sync_event' && e.newValue) {
+          const msg = JSON.parse(e.newValue);
+          handleRemoteSyncEvent(msg);
+        } else if (e.key === 'coopsense_transactions') {
+          reloadTransactionsFromStorage();
+        } else if (e.key === 'coopsense_feature_flags') {
+          featureFlags = JSON.parse(e.newValue);
+          applyFeatureFlags();
+        } else if (e.key === 'coopsense_admin_password' || e.key === 'coopsense_admin_pin') {
+          adminPassword = e.newValue || '3754';
+        } else if (e.key === 'coopsense_lang' && e.newValue) {
+          applyLanguage(e.newValue);
+        } else if (e.key === 'coopsense_theme' && e.newValue) {
+          applyTheme(e.newValue);
+        }
+      } catch(err) {}
+    });
+
+    // ── Startup Initialization ───────────────────────────────────────────
+    try {
+      initTheme();
+    } catch(e) {}
+    try {
+      updateEspStatus(true);
+    } catch(e) {}
+
+    try {
+      const savedLang = localStorage.getItem('coopsense_lang');
+      if (savedLang === 'ml' || savedLang === 'en') {
+        currentLang = savedLang;
+      } else if (typeof navigator !== 'undefined' && navigator.language && navigator.language.toLowerCase().startsWith('ml')) {
+        currentLang = 'ml';
+      }
+      applyLanguage(currentLang);
+    } catch(e) {}
+
+    try {
+      const p = localStorage.getItem('coopsense_admin_password') || localStorage.getItem('coopsense_admin_pin');
+      if (p && p !== '1234') {
+        adminPassword = p;
+      } else {
+        adminPassword = '3754';
+        try { localStorage.setItem('coopsense_admin_password', '3754'); } catch(e) {}
+      }
+      const storedHens = localStorage.getItem('coopsense_flock_count');
+      if (storedHens !== null) {
+        const parsed = parseInt(storedHens, 10);
+        totalHens = isNaN(parsed) || parsed < 0 ? 0 : parsed;
+      } else {
+        totalHens = 0;
+      }
+      updateFlockCount(totalHens);
+      const storedEggs = localStorage.getItem('coopsense_eggs_today');
+      if (storedEggs !== null) {
+        setEggs(storedEggs);
+      } else {
+        setEggs(0);
+      }
+    } catch(e) {}
+
+    try {
+      if (isSessionAuthenticated()) {
+        settingsUnlocked = true;
+        startSessionExpiryTimer();
+      }
+      updateSettingsNavIcon();
+    } catch(e) {}
+
+    try { renderFeederSlots(); } catch(e) { console.error('Feeder init error:', e); }
+    try { renderTransactions(); } catch(e) { console.error('Tx init error:', e); }
+    try { calculateFinances(); } catch(e) { console.error('Finances init error:', e); }
+    try { initAutopilotMatrixUI(); } catch(e) { console.error('Autopilot init error:', e); }
+    try { applyFeatureFlags(); } catch(e) { console.error('Feature flags init error:', e); }
+    try { updateDoorUI(); } catch(e) { console.error('Door UI error:', e); }
+    try { updateFeederLidUI(); } catch(e) { console.error('Feeder lid UI error:', e); }
+    try { updateFanUI(); } catch(e) { console.error('Fan UI error:', e); }
+    try { updateChickHeatUI(); } catch(e) { console.error('Chick heat UI error:', e); }
+    try { updateLightPill('in1', lightIndoor1); updateLightPill('in2', lightIndoor2); updateLightPill('out', lightOutdoor); } catch(e) {}
+    try { recalculateLayRate(); } catch(e) { console.error('Lay rate error:', e); }
+
+    // Periodic telemetry jitter simulation for offline standalone preview
+    setInterval(() => {
+      curTemp = 24.8 + (Math.random() * 0.4 - 0.2);
+      const el = document.getElementById('val-temp');
+      if (el) el.textContent = curTemp.toFixed(1) + '°C';
+    }, 3500);
+
+    // ── Signature Neumorphic Hero Clock & Dial Animation ─────────────────
+    function updateHeroClock() {
+      const now = new Date();
+      const dEl = document.getElementById('hero-date');
+      const tEl = document.getElementById('hero-time');
+      if (dEl) {
+        dEl.textContent = `${now.getMonth() + 1}/${String(now.getDate()).padStart(2, '0')}`;
+      }
+      if (tEl) {
+        let h = now.getHours();
+        const m = String(now.getMinutes()).padStart(2, '0');
+        const ampm = h >= 12 ? 'PM' : 'AM';
+        const displayH = h % 12 || 12;
+        tEl.textContent = `${displayH}:${m} ${ampm}`;
+      }
+      const hHand = document.getElementById('clock-hour-hand');
+      const mHand = document.getElementById('clock-min-hand');
+      if (hHand) {
+        const hourDeg = (now.getHours() % 12) * 30 + now.getMinutes() * 0.5;
+        hHand.style.transform = `translateX(-50%) rotate(${hourDeg}deg)`;
+      }
+      if (mHand) {
+        const minDeg = now.getMinutes() * 6;
+        mHand.style.transform = `translateX(-50%) rotate(${minDeg}deg)`;
+      }
+    }
+    setInterval(updateHeroClock, 1000);
+    updateHeroClock();
+
+    // Hardware sync loop
+    setInterval(pollHardwareStatus, 2000);
+  </script>
+</body>
+</html>
