@@ -1,11 +1,12 @@
 // CoopSense Progressive Web App Service Worker
-const CACHE_NAME = 'coopsense-v1';
+const CACHE_NAME = 'coopsense-v2';
 const PRECACHE_URLS = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './icon.svg'
 ];
 
 self.addEventListener('install', event => {

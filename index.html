@@ -12,6 +12,7 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22%20width=%22100%22%20height=%22100%22><text y=%22.9em%22 font-size=%2290%22>🐔</text></svg>">
 
   <style>
@@ -844,26 +845,6 @@
       ⚠️ Settings not synced to controller — tap <strong>Save &amp; Sync</strong> in Settings.
     </div>
 
-    <!-- Manual Override Control Strip (visible when AUTOPILOT is OFF) -->
-    <div id="autopilot-mode-strip" style="display:none; background:var(--surface); border-radius:24px; padding:12px 14px; flex-direction:column; gap:8px; box-shadow:var(--neu-inset-sm); margin-bottom:10px;">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <div style="display:flex; align-items:center; gap:6px; font-size:11px; font-weight:800; color:var(--terracotta);">
-          <span style="width:7px;height:7px;border-radius:50%;background:var(--terracotta);display:inline-block;"></span>
-          <span data-i18n="manual_strip_title">Manual Control Active</span>
-        </div>
-        <button class="neu-btn" onclick="toggleAutoMode()" data-i18n="resume_auto_btn" style="padding:4px 10px; font-size:10px;">Resume Auto</button>
-      </div>
-      <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(68px, 1fr)); gap:6px;" id="strip-btn-grid">
-        <button id="strip-btn-door" class="neu-btn" onclick="toggleDoorAction()" style="padding:7px 4px;font-size:10px;">🚪 Door</button>
-        <button id="strip-btn-feeder" class="neu-btn" onclick="toggleFeederAction()" style="padding:7px 4px;font-size:10px;">🌾 Feed</button>
-        <button id="strip-btn-l1" class="neu-btn" onclick="manualLight('in1')" style="padding:7px 4px;font-size:10px;">💡 L1</button>
-        <button id="strip-btn-l2" class="neu-btn" onclick="manualLight('in2')" style="padding:7px 4px;font-size:10px;">🪺 L2</button>
-        <button id="strip-btn-l3" class="neu-btn" onclick="manualLight('out')" style="padding:7px 4px;font-size:10px;">🔦 Yard</button>
-        <button id="strip-btn-manure" class="neu-btn" onclick="triggerTimedManure()" style="padding:7px 4px;font-size:10px;">♻️ Scrape</button>
-        <button id="strip-btn-fan" class="neu-btn" onclick="manualFan()" style="padding:7px 4px;font-size:10px;">🌀 Fan</button>
-      </div>
-    </div>
-
     <!-- ==================== TAB 1: HEN FARM DASHBOARD ==================== -->
     <div class="content-area" id="tab-coop">
 
@@ -911,8 +892,11 @@
 
       <!-- 3. ZONE LIGHTING BANK -->
       <div class="card" id="card-lights">
-        <div style="margin-bottom:10px;">
+        <div style="margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
           <strong style="font-size:14px; color:var(--text);" data-i18n="lights_title">💡 Zone Lighting Bank</strong>
+          <span id="badge-als-status" style="display:none; font-size:10px; font-weight:800; padding:2px 7px; border-radius:10px; background:var(--surface-light); color:var(--moss); border:1px solid var(--border-subtle);">
+            ☀️ ALS: <span id="val-als-lux">280</span> lx
+          </span>
         </div>
 
         <div style="display:flex; flex-direction:column; gap:8px;">
@@ -972,8 +956,8 @@
             <span id="manure-countdown-box" style="display:none; font-size:11px; font-weight:800; color:var(--moss);">
               ⏱️ <span id="lbl-manure-countdown">30</span>s
             </span>
-            <button id="btn-run-manure" class="neu-btn" onclick="triggerTimedManure()" style="padding:9px 16px; font-size:12px; font-weight:800;" data-i18n="btn_run">▶ Run</button>
-            <button id="btn-stop-manure" class="neu-btn neu-btn-danger" style="display:none; padding:9px 16px; font-size:12px; font-weight:800;" onclick="abortManureRoller()" data-i18n="btn_stop">⏹ Stop</button>
+            <button id="btn-run-manure" class="neu-btn" onclick="triggerTimedManure()" style="padding:9px 16px; font-size:12px; font-weight:800;" data-i18n="manure_btn_run">▶ Run</button>
+            <button id="btn-stop-manure" class="neu-btn neu-btn-danger" style="display:none; padding:9px 16px; font-size:12px; font-weight:800;" onclick="abortManureRoller()" data-i18n="manure_btn_stop">■ Stop</button>
           </div>
         </div>
       </div>
@@ -986,8 +970,22 @@
             <span id="azolla-countdown-box" style="display:none; font-size:11px; font-weight:800; color:var(--moss);">
               ⏱️ <span id="lbl-azolla-countdown">90</span>s
             </span>
-            <button id="btn-run-azolla" class="neu-btn" onclick="triggerAzollaHarvest()" style="padding:9px 16px; font-size:12px; font-weight:800;" data-i18n="btn_run">▶ Run</button>
-            <button id="btn-stop-azolla" class="neu-btn neu-btn-danger" style="display:none; padding:9px 16px; font-size:12px; font-weight:800;" onclick="abortAzollaHarvest()" data-i18n="btn_stop">⏹ Stop</button>
+            <button id="btn-run-azolla" class="neu-btn" onclick="triggerAzollaHarvest()" style="padding:9px 16px; font-size:12px; font-weight:800;" data-i18n="azolla_btn_run">▶ Run</button>
+            <button id="btn-stop-azolla" class="neu-btn neu-btn-danger" style="display:none; padding:9px 16px; font-size:12px; font-weight:800;" onclick="abortAzollaHarvest()" data-i18n="azolla_btn_stop">■ Stop</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. FLOCK BELL (SIMPLE MANUAL) -->
+      <div class="card" id="card-flock-ringer">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong style="font-size:14px; color:var(--text);" data-i18n="bell_title">🔔 Flock Bell</strong>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <span id="bell-countdown-box" style="display:none; font-size:11px; font-weight:800; color:var(--moss);">
+              ⏱️ <span id="lbl-bell-countdown">12</span>s
+            </span>
+            <button id="btn-ring-now" class="neu-btn" onclick="triggerRecallBell()" style="padding:9px 16px; font-size:12px; font-weight:800;" data-i18n="bell_btn_ring">▶ Ring</button>
+            <button id="btn-stop-bell" class="neu-btn neu-btn-danger" style="display:none; padding:9px 16px; font-size:12px; font-weight:800;" onclick="stopRecallBell()" data-i18n="bell_btn_stop">■ Stop</button>
           </div>
         </div>
       </div>
@@ -1363,7 +1361,15 @@
             </div>
           </div>
 
-          <!-- 10. Azolla Cultivation Feature (Default OFF) -->
+          <!-- 10. Flock Bell Feature -->
+          <div class="toggle-row">
+            <span style="font-size:13px; font-weight:800; color:var(--text);">🔔 Flock Bell</span>
+            <div class="toggle-pill on" id="feat-toggle-bell" onclick="toggleFeature('bell')">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+
+          <!-- 11. Azolla Cultivation Feature (Default OFF) -->
           <div class="toggle-row">
             <span style="font-size:13px; font-weight:800; color:var(--text);">🌿 Azolla Cultivation &amp; Skimmer</span>
             <div class="toggle-pill off" id="feat-toggle-azolla" onclick="toggleFeature('azolla')">
@@ -1386,6 +1392,10 @@
             <span>💡 Automated Photoperiod Timers</span>
             <input type="checkbox" id="matrix-auto-lights" checked onchange="saveAutopilotMatrix()" style="width:18px; height:18px; accent-color:var(--moss); cursor:pointer;" />
           </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12.5px; font-weight:700; cursor:default;" id="matrix-wrap-als">
+            <span data-i18n="matrix_als">☀️ ALS Ambient Light Trigger</span>
+            <input type="checkbox" id="matrix-auto-als" onchange="saveAutopilotMatrix()" style="width:18px; height:18px; accent-color:var(--moss); cursor:pointer;" />
+          </div>
           <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12.5px; font-weight:700; cursor:default;" id="matrix-wrap-feeder">
             <span>🌾 Gravity Feeder Multi-Slot Timing</span>
             <input type="checkbox" id="matrix-auto-feeder" checked onchange="saveAutopilotMatrix()" style="width:18px; height:18px; accent-color:var(--moss); cursor:pointer;" />
@@ -1405,6 +1415,10 @@
           <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12.5px; font-weight:700; cursor:default;" id="matrix-wrap-manure">
             <span>♻️ Scheduled Manure Scrape</span>
             <input type="checkbox" id="matrix-auto-manure" checked onchange="saveAutopilotMatrix()" style="width:18px; height:18px; accent-color:var(--moss); cursor:pointer;" />
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid rgba(0,0,0,0.04); font-size:12.5px; font-weight:700; cursor:default;" id="matrix-wrap-bell">
+            <span>🔔 Scheduled Flock Bell</span>
+            <input type="checkbox" id="matrix-auto-bell" checked onchange="saveAutopilotMatrix()" style="width:18px; height:18px; accent-color:var(--moss); cursor:pointer;" />
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; padding:9px 0; font-size:12.5px; font-weight:700; cursor:default;" id="matrix-wrap-azolla">
             <span>🌿 Azolla Daily Skimming</span>
@@ -1477,6 +1491,48 @@
             </div>
           </div>
         </div>
+
+        <!-- ALS Ambient Light Trigger Sub-Section -->
+        <div style="margin-top:14px; border-top:1px solid var(--border); padding-top:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-size:12px; font-weight:800; color:var(--text);" data-i18n="cfg_als_title">☀️ ALS Ambient Light Trigger</div>
+            <div class="toggle-pill off" id="toggle-als-enable" onclick="toggleAlsLightTrigger()" style="cursor:pointer;">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+
+          <div id="als-config-panel" style="display:none; margin-top:10px; background:var(--surface); border:1px solid var(--border-subtle); border-radius:14px; padding:10px;">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+              <div>
+                <label style="font-size:10px; color:var(--text-muted); font-weight:700;" data-i18n="cfg_als_target_lbl">Target Light Zone</label>
+                <select id="cfg-als-target" class="input-box" onchange="saveAlsConfig()" oninput="saveAlsConfig()" style="width:100%; height:36px; padding:4px 8px; font-size:11px; font-weight:700;">
+                  <option value="in1">L1: Roosting Perch</option>
+                  <option value="out">L3: Yard Security</option>
+                  <option value="both">Both L1 &amp; L3</option>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:10px; color:var(--text-muted); font-weight:700;" data-i18n="cfg_als_thresh_lbl">Darkness Trigger (1 - 10)</label>
+                <select id="cfg-als-threshold" class="input-box" onchange="saveAlsConfig()" oninput="saveAlsConfig()" style="width:100%; height:36px; padding:4px 8px; font-size:11px; font-weight:700;">
+                  <option value="1">1 (120 lx - Light Dusk)</option>
+                  <option value="2">2 (100 lx)</option>
+                  <option value="3">3 (85 lx)</option>
+                  <option value="4">4 (70 lx)</option>
+                  <option value="5" selected>5 (55 lx - Twilight)</option>
+                  <option value="6">6 (42 lx)</option>
+                  <option value="7">7 (32 lx)</option>
+                  <option value="8">8 (24 lx)</option>
+                  <option value="9">9 (17 lx)</option>
+                  <option value="10">10 (10 lx - Deep Dark)</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px; font-size:10.5px; color:var(--text-muted);">
+              <span>Trigger: <strong id="lbl-target-lux" style="color:var(--text); font-weight:800;">55 lx</strong> • Live: <strong id="lbl-live-als" style="color:var(--moss);">280 lx</strong></span>
+              <span id="lbl-als-status-text" style="font-weight:700;">☀️ Daytime</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- SECTION 6: FEEDER MULTI-SLOT SCHEDULE -->
@@ -1501,6 +1557,22 @@
           <div>
             <label style="font-size:11px; font-weight:700; color:var(--text);">⏱️ Runtime (Seconds)</label>
             <input type="number" id="cfg-manure-duration" class="input-box" min="5" max="180" step="5" value="30" onchange="saveManureTimer()" />
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 8: FLOCK BELL SCHEDULE -->
+      <div class="card" id="card-settings-flock-ringer">
+        <div class="card-title">🔔 Flock Bell Schedule</div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px;">
+          <div>
+            <label style="font-size:11px; font-weight:700; color:var(--text);">🕐 Ring Time</label>
+            <input type="time" id="cfg-bell-time" class="input-box" value="18:30" onchange="saveRingerConfig()" />
+          </div>
+          <div>
+            <label style="font-size:11px; font-weight:700; color:var(--text);">⏱️ Duration (Seconds)</label>
+            <input type="number" id="cfg-bell-duration" class="input-box" min="1" max="60" step="1" value="12" onchange="saveRingerConfig()" />
           </div>
         </div>
       </div>
@@ -1713,8 +1785,8 @@
         manure_status_ready: 'READY',
         manure_status_active: 'SCRAPING ACTIVE',
         manure_status_cleaned: 'CLEANED',
-        manure_btn_run: '▶ Run Scraper',
-        manure_btn_stop: '⏹ Stop',
+        manure_btn_run: '▶ Run',
+        manure_btn_stop: '■ Stop',
         
         // Chick Brooder
         chick_title: '🐥 Chick Brooder',
@@ -1736,9 +1808,26 @@
         // Azolla
         azolla_title: '🌿 Azolla Harvester',
         btn_run: '▶ Run',
-        btn_stop: '⏹ Stop',
+        btn_stop: '■ Stop',
+        azolla_btn_run: '▶ Run',
+        azolla_btn_stop: '■ Stop',
+        bell_title: '🔔 Flock Bell',
+        bell_btn_ring: '▶ Ring',
+        bell_btn_stop: '■ Stop',
+        feat_bell: '🔔 Flock Bell',
+        matrix_bell: '🔔 Scheduled Flock Bell',
+        cfg_bell_title: 'Flock Bell Schedule',
+        cfg_bell_time_lbl: '🔔 Ring Time',
+        cfg_bell_dur_lbl: '⏱️ Duration (Sec)',
         feat_azolla: '🌿 Azolla Cultivation & Skimmer',
         matrix_azolla: '🌿 Azolla Daily Skimming',
+        matrix_als: '☀️ ALS Ambient Light Trigger',
+        cfg_als_title: '☀️ ALS Ambient Light Trigger',
+        cfg_als_desc: 'Turn on lights automatically when ambient darkness drops below threshold (Autopilot only)',
+        cfg_als_target_lbl: 'Target Light Zone',
+        cfg_als_thresh_lbl: 'Darkness Trigger',
+        als_status_day: '☀️ Daytime',
+        als_status_dark: '🌙 Dark (Trigger ON)',
         cfg_azolla_title: 'Azolla Skimmer Schedule',
         cfg_azolla_time_lbl: '🌿 Harvest Time',
         cfg_azolla_dur_lbl: '⏱️ Duration (Sec)',
@@ -1912,7 +2001,7 @@
         manure_status_active: 'പ്രവർത്തിക്കുന്നു',
         manure_status_cleaned: 'പൂർത്തിയായി',
         manure_btn_run: '▶ തുടങ്ങുക',
-        manure_btn_stop: '⏹ നിർത്തുക',
+        manure_btn_stop: '■ നിർത്തുക',
         
         // Chick Brooder
         chick_title: '🐥 ബ്രൂഡർ (ചൂട്)',
@@ -1934,9 +2023,26 @@
         // Azolla
         azolla_title: '🌿 അസോള',
         btn_run: '▶ തുടങ്ങുക',
-        btn_stop: '⏹ നിർത്തുക',
+        btn_stop: '■ നിർത്തുക',
+        azolla_btn_run: '▶ തുടങ്ങുക',
+        azolla_btn_stop: '■ നിർത്തുക',
+        bell_title: '🔔 ബെൽ',
+        bell_btn_ring: '▶ അടിക്കുക',
+        bell_btn_stop: '■ നിർത്തുക',
+        feat_bell: '🔔 ബെൽ',
+        matrix_bell: '🔔 ബെൽ സമയം',
+        cfg_bell_title: 'ബെൽ ഷെഡ്യൂൾ',
+        cfg_bell_time_lbl: '🔔 സമയം',
+        cfg_bell_dur_lbl: '⏱️ സമയം (സെക്കൻഡ്)',
         feat_azolla: '🌿 അസോള കൾട്ടിവേഷൻ',
         matrix_azolla: '🌿 ദിവസേന അസോള മാറ്റൽ',
+        matrix_als: '☀️ വെളിച്ച സെൻസർ (ALS) നിയന്ത്രണം',
+        cfg_als_title: '☀️ വെളിച്ച സെൻസർ (ALS) ഓട്ടോ ട്രിഗ്ഗർ',
+        cfg_als_desc: 'ഇരുട്ട് കൂടുമ്പോൾ ലൈറ്റുകൾ തനിയെ ഓൺ ചെയ്യുക (ഓട്ടോപൈലറ്റ് മോഡിൽ മാത്രം)',
+        cfg_als_target_lbl: 'ലൈറ്റ് തിരഞ്ഞെടുക്കുക',
+        cfg_als_thresh_lbl: 'ട്രിഗ്ഗർ വെളിച്ചം',
+        als_status_day: '☀️ പകൽ വെളിച്ചം',
+        als_status_dark: '🌙 ഇരുട്ട് (ലൈറ്റ് ഓൺ)',
         cfg_azolla_title: 'അസോള ടൈമർ',
         cfg_azolla_time_lbl: '🌿 സമയം',
         cfg_azolla_dur_lbl: '⏱️ സമയം (സെക്കൻഡ്)',
@@ -2106,6 +2212,11 @@
         updateLightPill('in2', lightIndoor2);
         updateLightPill('out', lightOutdoor);
       }
+      if (typeof updateManureUI === 'function') updateManureUI();
+      if (typeof updateAzollaUI === 'function') updateAzollaUI();
+      if (typeof updateRingerUI === 'function') updateRingerUI();
+      if (typeof updateAlsUI === 'function') updateAlsUI();
+      if (typeof evaluateAlsLighting === 'function') evaluateAlsLighting();
       if (typeof calculateFinances === 'function') calculateFinances();
       if (typeof renderTransactions === 'function') renderTransactions();
       if (typeof setTxType === 'function' && typeof currentTxType !== 'undefined') setTxType(currentTxType);
@@ -2191,6 +2302,14 @@
     let manureCountdownInterval = null;
     let manureRemainingSec = 30;
 
+    // Simple Flock Bell (Manual & Autopilot Scheduled)
+    let ringerActive = false;
+    let ringerRemainingSec = 0;
+    let ringerDurationSec = 12;
+    let bellScheduledTime = '18:30';
+    let bellAutoEnabled = true;
+    let ringerInterval = null;
+
     // Settings Parameters
     let manureRotationTime = '06:00';
     let manureRunDurationSec = 30;
@@ -2204,6 +2323,19 @@
     let lightIndoorOffTime = '21:00';
     let lightOutdoorOnTime = '18:45';
     let lightOutdoorOffTime = '22:30';
+
+    // Ambient Light Sensor (ALS) trigger parameters & Anti-Flicker Architecture
+    let alsLux = 280;
+    let alsFilteredLux = 280;
+    let alsLightEnabled = false;
+    let alsTargetZone = 'in1';
+    let alsScaleLevel = 5; // Scale 1 to 10 (1 = Light Dusk, 10 = Deep Dark)
+    let alsTriggerActive = false;
+    let alsDarkDebounceSec = 0;   // Seconds of sustained darkness
+    let alsBrightDebounceSec = 0; // Seconds of sustained daylight
+    let alsStateLockedUntil = 0;  // Minimum on/off dwell lockout timestamp
+    const ALS_DEBOUNCE_REQUIRED_SEC = 10; // Must sustain darkness/light for 10s to switch
+    const ALS_MIN_DWELL_MS = 60000;       // Minimum 60s hold time to prevent short-cycling
 
     // Azolla harvest state
     let azollaHarvestTime = '08:30';
@@ -2220,6 +2352,7 @@
       heater: true,
       predator: true,
       cctv: true,
+      bell: true,
       azolla: false   // Disabled by default
     };
 
@@ -2235,11 +2368,13 @@
     let autopilotMatrix = {
       door: true,
       lights: true,
+      als: false,
       feeder: true,
       fan: true,
       heater: true,
       predator: true,
       manure: true,
+      bell: true,
       azolla: false
     };
 
@@ -2304,6 +2439,7 @@
         egg_tracker: 'card-egg-harvest',
         heater: 'card-chick',
         predator: 'card-predator-guard',
+        bell: 'card-flock-ringer',
         azolla: 'card-azolla-widget'
       };
 
@@ -2340,6 +2476,7 @@
         feeder: 'card-settings-feeder',
         lights: 'card-settings-lights',
         manure: 'card-settings-manure',
+        bell: 'card-settings-flock-ringer',
         azolla: 'card-cfg-azolla'
       };
       for (let feat in mapSettingsCard) {
@@ -2358,6 +2495,7 @@
         heater: 'matrix-wrap-heater',
         predator: 'matrix-wrap-predator',
         manure: 'matrix-wrap-manure',
+        bell: 'matrix-wrap-bell',
         azolla: 'matrix-wrap-azolla'
       };
       for (let feat in mapMatrixWrap) {
@@ -2367,22 +2505,7 @@
         }
       }
 
-      // 6. Manual strip buttons visibility
-      const stripMap = {
-        door: ['strip-btn-door'],
-        feeder: ['strip-btn-feeder'],
-        lights: ['strip-btn-l1', 'strip-btn-l2', 'strip-btn-l3'],
-        manure: ['strip-btn-manure'],
-        fan: ['strip-btn-fan']
-      };
-      for (let feat in stripMap) {
-        stripMap[feat].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.style.display = featureFlags[feat] ? 'block' : 'none';
-        });
-      }
-
-      // 7. Update Feature Toggles Pills in Settings
+      // 6. Update Feature Toggles Pills in Settings
       for (let feat in featureFlags) {
         const pill = document.getElementById('feat-toggle-' + feat);
         if (pill) {
@@ -2413,11 +2536,23 @@
     function saveAutopilotMatrix() {
       autopilotMatrix.door = document.getElementById('matrix-auto-door').checked;
       autopilotMatrix.lights = document.getElementById('matrix-auto-lights').checked;
+      const alsChk = document.getElementById('matrix-auto-als');
+      if (alsChk) {
+        autopilotMatrix.als = alsChk.checked;
+        alsLightEnabled = alsChk.checked;
+        try { localStorage.setItem('coopsense_als_light_enabled', alsLightEnabled); } catch(e) {}
+        if (typeof updateAlsUI === 'function') updateAlsUI();
+        if (typeof evaluateAlsLighting === 'function') evaluateAlsLighting();
+      }
       autopilotMatrix.feeder = document.getElementById('matrix-auto-feeder').checked;
       autopilotMatrix.fan = document.getElementById('matrix-auto-fan').checked;
       autopilotMatrix.heater = document.getElementById('matrix-auto-heater').checked;
       autopilotMatrix.predator = document.getElementById('matrix-auto-predator').checked;
       autopilotMatrix.manure = document.getElementById('matrix-auto-manure').checked;
+      const bellChk = document.getElementById('matrix-auto-bell');
+      if (bellChk) {
+        autopilotMatrix.bell = bellChk.checked;
+      }
       autopilotMatrix.azolla = document.getElementById('matrix-auto-azolla').checked;
 
       try {
@@ -2596,21 +2731,19 @@
       const btn = document.getElementById('btn-autopilot');
       const dot = document.getElementById('auto-dot');
       const txt = document.getElementById('auto-text');
-      const strip = document.getElementById('autopilot-mode-strip');
 
       if (autoMode) {
         btn.classList.remove('manual');
         dot.style.background = 'var(--moss)';
         txt.textContent = t('autopilot_on');
-        if (strip) strip.style.display = 'none';
         showToast(t('toast_autopilot_on'));
       } else {
         btn.classList.add('manual');
         dot.style.background = '#EF4444';
         txt.textContent = t('manual_mode');
-        if (strip) strip.style.display = 'flex';
         showToast(t('toast_manual_mode'));
       }
+      if (typeof evaluateAlsLighting === 'function') evaluateAlsLighting();
       broadcastState('ACTUATOR_UPDATE', { autoMode: autoMode });
     }
 
@@ -2621,7 +2754,6 @@
       const openBtn = document.getElementById('btn-open-door');
       const closeBtn = document.getElementById('btn-close-door');
       const statusBadge = document.getElementById('status-door');
-      const stripBtn = document.getElementById('strip-btn-door');
       const doorCard = document.getElementById('card-door');
       const doorSymbol = document.getElementById('icon-door-symbol');
       const doorBubble = document.getElementById('icon-door-bubble');
@@ -2674,10 +2806,6 @@
           closeBtn.classList.add('btn-disabled');
           closeBtn.textContent = t('door_busy_close');
         }
-        if (stripBtn) {
-          stripBtn.textContent = t('strip_door_moving');
-          stripBtn.style.opacity = '0.6';
-        }
         return;
       }
 
@@ -2708,13 +2836,6 @@
           closeBtn.classList.remove('btn-disabled');
           closeBtn.textContent = t('door_btn_close');
         }
-        if (stripBtn) {
-          stripBtn.textContent = t('strip_door_close');
-          stripBtn.style.background = '#7F1D1D';
-          stripBtn.style.color = '#FCA5A5';
-          stripBtn.style.borderColor = '#991B1B';
-          stripBtn.style.opacity = '1';
-        }
       } else {
         // closed state
         if (doorSymbol) {
@@ -2743,18 +2864,7 @@
           closeBtn.classList.remove('btn-disabled');
           closeBtn.textContent = t('door_btn_close');
         }
-        if (stripBtn) {
-          stripBtn.textContent = t('strip_door_open');
-          stripBtn.style.background = '#14532D';
-          stripBtn.style.color = '#86EFAC';
-          stripBtn.style.borderColor = '#166534';
-          stripBtn.style.opacity = '1';
-        }
       }
-    }
-
-    function toggleDoorAction() {
-      triggerDoor(doorState === 'open' ? 'close' : 'open');
     }
 
     function triggerDoor(action) {
@@ -2773,6 +2883,11 @@
 
       doorBusy = true;
       updateDoorUI();
+
+      try {
+        fetch(`http://${espIP}/api/control?door=${action}`, { mode: 'no-cors' }).catch(() => {});
+      } catch(e) {}
+      triggerBurstSync();
 
       if (action === 'open') {
         showToast(t('toast_door_opening'));
@@ -2807,12 +2922,12 @@
       }
       feederLidOpen = open;
       updateFeederLidUI();
+      try {
+        fetch(`http://${espIP}/api/control?feederLid=${open ? 'open' : 'close'}`, { mode: 'no-cors' }).catch(() => {});
+      } catch(e) {}
+      triggerBurstSync();
       broadcastState('ACTUATOR_UPDATE', { feederLidOpen: feederLidOpen });
       showToast(open ? t('toast_feeder_opened') : t('toast_feeder_closed'));
-    }
-
-    function toggleFeederAction() {
-      controlFeederLid(!feederLidOpen);
     }
 
     function updateFeederLidUI() {
@@ -2824,7 +2939,6 @@
       const badge = document.getElementById('badge-feeder-lid');
       const bOpen = document.getElementById('btn-feeder-open');
       const bClose = document.getElementById('btn-feeder-close');
-      const stripBtn = document.getElementById('strip-btn-feeder');
       const feederCard = document.getElementById('card-feeder-lid');
       const feederSymbol = document.getElementById('icon-feeder-symbol');
       const feederBubble = document.getElementById('icon-feeder-bubble');
@@ -2854,12 +2968,6 @@
           bClose.className = 'neu-btn neu-btn-danger';
           bClose.textContent = t('feeder_btn_close');
         }
-        if (stripBtn) {
-          stripBtn.textContent = t('strip_feeder_close');
-          stripBtn.style.background = '#7F1D1D';
-          stripBtn.style.color = '#FCA5A5';
-          stripBtn.style.borderColor = '#991B1B';
-        }
       } else {
         // closed state
         if (feederSymbol) {
@@ -2886,22 +2994,11 @@
         if (bClose) {
           bClose.style.display = 'none';
         }
-        if (stripBtn) {
-          stripBtn.textContent = t('strip_feeder_open');
-          stripBtn.style.background = '#1E293B';
-          stripBtn.style.color = '#86EFAC';
-          stripBtn.style.borderColor = '#334155';
-        }
       }
     }
 
     // ── Timed Manure Roller with Countdown (Requirement 5) ───────────────
-    function triggerTimedManure() {
-      if (manureRunning) return;
-      manureRunning = true;
-      manureRemainingSec = manureRunDurationSec;
-
-      const badge = document.getElementById('badge-manure-status');
+    function updateManureUI() {
       const bRun = document.getElementById('btn-run-manure');
       const bStop = document.getElementById('btn-stop-manure');
       const cBox = document.getElementById('manure-countdown-box');
@@ -2909,57 +3006,66 @@
       const card = document.getElementById('card-manure-roller');
       const symbol = document.getElementById('icon-manure-symbol');
 
-      if (card) card.classList.add('active-manure');
-      if (symbol) symbol.className = 'roller-scraping';
-
-      if (badge) {
-        badge.textContent = t('manure_status_active');
-        badge.style.background = '#F3E8FF';
-        badge.style.color = '#7E22CE';
+      if (manureRunning) {
+        if (card) card.classList.add('active-manure');
+        if (symbol) symbol.className = 'roller-scraping';
+        if (bRun) bRun.style.display = 'none';
+        if (bStop) {
+          bStop.style.display = 'inline-flex';
+          bStop.textContent = t('manure_btn_stop');
+        }
+        if (cBox) cBox.style.display = 'inline-block';
+        if (cLbl) cLbl.textContent = manureRemainingSec;
+      } else {
+        if (card) card.classList.remove('active-manure');
+        if (symbol) symbol.className = '';
+        if (bRun) {
+          bRun.style.display = 'inline-flex';
+          bRun.textContent = t('manure_btn_run');
+        }
+        if (bStop) bStop.style.display = 'none';
+        if (cBox) cBox.style.display = 'none';
       }
-      if (bRun) bRun.style.display = 'none';
-      if (bStop) bStop.style.display = 'flex';
-      if (cBox) cBox.style.display = 'block';
-      if (cLbl) cLbl.textContent = manureRemainingSec;
+    }
+
+    function triggerTimedManure() {
+      if (manureRunning) {
+        abortManureRoller();
+        return;
+      }
+      manureRunning = true;
+      manureRemainingSec = manureRunDurationSec;
+      updateManureUI();
+
+      try {
+        fetch(`http://${espIP}/api/control?manure=start&duration=${manureRunDurationSec}`, { mode: 'no-cors' }).catch(() => {});
+      } catch(e) {}
+      triggerBurstSync();
 
       clearInterval(manureCountdownInterval);
       manureCountdownInterval = setInterval(() => {
         manureRemainingSec--;
-        if (cLbl) cLbl.textContent = manureRemainingSec;
+        updateManureUI();
         if (manureRemainingSec <= 0) {
           abortManureRoller(true);
         }
       }, 1000);
 
       broadcastState('ACTUATOR_UPDATE', { manureRunning: true });
-      showToast('♻️ Manure Roller Started: ' + manureRunDurationSec + 's');
     }
 
     function abortManureRoller(completed = false) {
       clearInterval(manureCountdownInterval);
       manureRunning = false;
+      manureRemainingSec = 0;
+      updateManureUI();
 
-      const badge = document.getElementById('badge-manure-status');
-      const bRun = document.getElementById('btn-run-manure');
-      const bStop = document.getElementById('btn-stop-manure');
-      const cBox = document.getElementById('manure-countdown-box');
-      const card = document.getElementById('card-manure-roller');
-      const symbol = document.getElementById('icon-manure-symbol');
-
-      if (card) card.classList.remove('active-manure');
-      if (symbol) symbol.className = '';
-
-      if (badge) {
-        badge.textContent = completed ? t('manure_status_cleaned') : t('manure_status_ready');
-        badge.style.background = '#F1F5F9';
-        badge.style.color = '#475569';
-      }
-      if (bRun) bRun.style.display = 'flex';
-      if (bStop) bStop.style.display = 'none';
-      if (cBox) cBox.style.display = 'none';
+      try {
+        fetch(`http://${espIP}/api/control?manure=stop`, { mode: 'no-cors' }).catch(() => {});
+      } catch(e) {}
+      triggerBurstSync();
 
       broadcastState('ACTUATOR_UPDATE', { manureRunning: false });
-      showToast(completed ? t('toast_manure_complete') : t('toast_manure_stopped'));
     }
 
     function saveManureTimer() {
@@ -2974,21 +3080,111 @@
       markSettingsDirty();
     }
 
+    // ── Simple Flock Bell Management (Manual & Autopilot Scheduled) ───────
+    function triggerRecallBell(durationSec) {
+      if (ringerActive) {
+        stopRecallBell();
+        return;
+      }
+      const sec = durationSec || ringerDurationSec;
+      ringerActive = true;
+      ringerRemainingSec = sec;
+      updateRingerUI();
+
+      try {
+        fetch(`http://${espIP}/api/control?ringer=ring&duration=${sec}`, { mode: 'no-cors' }).catch(() => {});
+      } catch(e) {}
+      triggerBurstSync();
+
+      clearInterval(ringerInterval);
+      ringerInterval = setInterval(() => {
+        ringerRemainingSec--;
+        updateRingerUI();
+        if (ringerRemainingSec <= 0) {
+          stopRecallBell();
+        }
+      }, 1000);
+
+      broadcastState('ACTUATOR_UPDATE', { ringerActive: true, ringerDuration: sec });
+    }
+
+    function stopRecallBell() {
+      clearInterval(ringerInterval);
+      ringerActive = false;
+      ringerRemainingSec = 0;
+      updateRingerUI();
+      try {
+        fetch(`http://${espIP}/api/control?ringer=stop`, { mode: 'no-cors' }).catch(() => {});
+      } catch(e) {}
+      triggerBurstSync();
+      broadcastState('ACTUATOR_UPDATE', { ringerActive: false });
+    }
+
+    function updateRingerUI() {
+      const bRing = document.getElementById('btn-ring-now');
+      const bStop = document.getElementById('btn-stop-bell');
+      const cBox = document.getElementById('bell-countdown-box');
+      const cLbl = document.getElementById('lbl-bell-countdown');
+
+      if (ringerActive) {
+        if (bRing) bRing.style.display = 'none';
+        if (bStop) {
+          bStop.style.display = 'inline-flex';
+          bStop.textContent = t('bell_btn_stop');
+        }
+        if (cBox) cBox.style.display = 'inline-block';
+        if (cLbl) cLbl.textContent = ringerRemainingSec;
+      } else {
+        if (bRing) {
+          bRing.style.display = 'inline-flex';
+          bRing.textContent = t('bell_btn_ring');
+        }
+        if (bStop) bStop.style.display = 'none';
+        if (cBox) cBox.style.display = 'none';
+      }
+    }
+
+    function saveRingerConfig() {
+      const timeInput = document.getElementById('cfg-bell-time');
+      const durInput = document.getElementById('cfg-bell-duration');
+      if (timeInput && timeInput.value) {
+        bellScheduledTime = timeInput.value;
+      }
+      if (durInput) {
+        ringerDurationSec = Math.max(1, Math.min(60, parseInt(durInput.value, 10) || 12));
+        durInput.value = ringerDurationSec;
+      }
+      try {
+        localStorage.setItem('coopsense_bell_time', bellScheduledTime);
+        localStorage.setItem('coopsense_ringer_duration_sec', ringerDurationSec);
+      } catch(e) {}
+      markSettingsDirty();
+    }
+
     // ── Real-Time Lighting Controls (Requirement 2) ──────────────────────
     function toggleLight(zone) {
+      let state = false;
       if (zone === 'in1') {
         lightIndoor1 = !lightIndoor1;
+        state = lightIndoor1;
         updateLightPill('in1', lightIndoor1);
         showToast(lightIndoor1 ? '💡 L1 Roosting Perch ON' : '💡 L1 Roosting Perch OFF');
       } else if (zone === 'in2') {
         lightIndoor2 = !lightIndoor2;
+        state = lightIndoor2;
         updateLightPill('in2', lightIndoor2);
         showToast(lightIndoor2 ? '🪺 L2 Nesting Bay ON' : '🪺 L2 Nesting Bay OFF');
       } else if (zone === 'out') {
         lightOutdoor = !lightOutdoor;
+        state = lightOutdoor;
         updateLightPill('out', lightOutdoor);
         showToast(lightOutdoor ? '🔦 L3 Security Flood ON' : '🔦 L3 Security Flood OFF');
       }
+      try {
+        const param = (zone === 'in1' ? 'lightIn1' : zone === 'in2' ? 'lightIn2' : 'lightOut');
+        fetch(`http://${espIP}/api/control?${param}=${state ? 1 : 0}`, { mode: 'no-cors' }).catch(() => {});
+      } catch(e) {}
+      triggerBurstSync();
       broadcastState('ACTUATOR_UPDATE', {
         lightIn1: lightIndoor1,
         lightIn2: lightIndoor2,
@@ -3035,6 +3231,10 @@
       if (type === 'fan') {
         fanOn = !fanOn;
         updateFanUI();
+        try {
+          fetch(`http://${espIP}/api/control?fan=${fanOn ? 1 : 0}`, { mode: 'no-cors' }).catch(() => {});
+        } catch(e) {}
+        triggerBurstSync();
         broadcastState('ACTUATOR_UPDATE', { fanOn: fanOn });
         showToast(fanOn ? t('toast_fan_on') : t('toast_fan_off'));
       }
@@ -3064,6 +3264,10 @@
     function toggleChickHeat() {
       chickHeat = !chickHeat;
       updateChickHeatUI();
+      try {
+        fetch(`http://${espIP}/api/control?chickHeat=${chickHeat ? 1 : 0}`, { mode: 'no-cors' }).catch(() => {});
+      } catch(e) {}
+      triggerBurstSync();
       broadcastState('ACTUATOR_UPDATE', { chickHeat: chickHeat });
       showToast(chickHeat ? t('toast_chick_on') : t('toast_chick_off'));
     }
@@ -3090,6 +3294,10 @@
       const pill = document.getElementById('toggle-predator-pill');
       if (pill) { pill.classList.toggle('on', predatorGuard); pill.classList.toggle('off', !predatorGuard); }
       if (card) card.classList.toggle('active-predator', predatorGuard);
+      try {
+        fetch(`http://${espIP}/api/control?predator=${predatorGuard ? 1 : 0}`, { mode: 'no-cors' }).catch(() => {});
+      } catch(e) {}
+      triggerBurstSync();
       broadcastState('ACTUATOR_UPDATE', { predatorGuard: predatorGuard });
       showToast(predatorGuard ? t('toast_predator_on') : t('toast_predator_off'));
     }
@@ -3140,7 +3348,7 @@
       list.innerHTML = '';
       feederSlots.forEach(function(slot, i) {
         const row = document.createElement('div');
-        row.style.cssText = 'display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:end; background:#F8FAFC; border:1px solid var(--border); border-radius:12px; padding:10px 12px;';
+        row.style.cssText = 'display:grid; grid-template-columns:1fr 1fr auto; gap:8px; align-items:end; background:var(--surface); box-shadow:var(--neu-inset-sm); border:1px solid var(--border); border-radius:14px; padding:10px 12px;';
         row.innerHTML = `
           <div>
             <label style="font-size:10px; font-weight:800; color:var(--muted); display:block; margin-bottom:4px;">🔓 OPEN</label>
@@ -3150,7 +3358,7 @@
             <label style="font-size:10px; font-weight:800; color:var(--muted); display:block; margin-bottom:4px;">🔒 CLOSE</label>
             <input type="time" class="input-box" style="width:100%; margin:0;" value="${slot.close}" onchange="updateFeederSlot(${i}, 'close', this.value)" />
           </div>
-          <button onclick="removeFeederSlot(${i})" style="background:#FEE2E2; color:#B91C1C; border:1px solid #FECACA; border-radius:10px; width:34px; height:34px; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; flex-shrink:0;">×</button>
+          <button onclick="removeFeederSlot(${i})" style="background:rgba(239,68,68,0.15); color:var(--terracotta); border:1px solid rgba(239,68,68,0.25); border-radius:10px; width:34px; height:34px; font-size:16px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; flex-shrink:0;">×</button>
         `;
         list.appendChild(row);
       });
@@ -3188,46 +3396,68 @@
     let azollaInterval = null;
     let azollaRemainingSec = 90;
 
-    function triggerAzollaHarvest() {
-      if (azollaRunning) return;
-      azollaRunning = true;
-      azollaRemainingSec = azollaSkimDurationSec || 90;
-
+    function updateAzollaUI() {
       const bRun = document.getElementById('btn-run-azolla');
       const bStop = document.getElementById('btn-stop-azolla');
       const cBox = document.getElementById('azolla-countdown-box');
       const cLbl = document.getElementById('lbl-azolla-countdown');
 
-      if (bRun) bRun.style.display = 'none';
-      if (bStop) bStop.style.display = 'inline-flex';
-      if (cBox) cBox.style.display = 'block';
-      if (cLbl) cLbl.textContent = azollaRemainingSec;
+      if (azollaRunning) {
+        if (bRun) bRun.style.display = 'none';
+        if (bStop) {
+          bStop.style.display = 'inline-flex';
+          bStop.textContent = t('azolla_btn_stop');
+        }
+        if (cBox) cBox.style.display = 'inline-block';
+        if (cLbl) cLbl.textContent = azollaRemainingSec;
+      } else {
+        if (bRun) {
+          bRun.style.display = 'inline-flex';
+          bRun.textContent = t('azolla_btn_run');
+        }
+        if (bStop) bStop.style.display = 'none';
+        if (cBox) cBox.style.display = 'none';
+      }
+    }
 
-      showToast(t('toast_azolla_started'));
+    function triggerAzollaHarvest() {
+      if (azollaRunning) {
+        abortAzollaHarvest();
+        return;
+      }
+      azollaRunning = true;
+      azollaRemainingSec = azollaSkimDurationSec || 90;
+      updateAzollaUI();
+
+      try {
+        fetch(`http://${espIP}/api/control?azolla=start&duration=${azollaRemainingSec}`, { mode: 'no-cors' }).catch(() => {});
+      } catch(e) {}
+      triggerBurstSync();
 
       clearInterval(azollaInterval);
       azollaInterval = setInterval(() => {
         azollaRemainingSec--;
-        if (cLbl) cLbl.textContent = azollaRemainingSec;
+        updateAzollaUI();
         if (azollaRemainingSec <= 0) {
           abortAzollaHarvest(true);
         }
       }, 1000);
+
+      broadcastState('ACTUATOR_UPDATE', { azollaRunning: true });
     }
 
     function abortAzollaHarvest(completed = false) {
-      azollaRunning = false;
       clearInterval(azollaInterval);
+      azollaRunning = false;
+      azollaRemainingSec = 0;
+      updateAzollaUI();
 
-      const bRun = document.getElementById('btn-run-azolla');
-      const bStop = document.getElementById('btn-stop-azolla');
-      const cBox = document.getElementById('azolla-countdown-box');
+      try {
+        fetch(`http://${espIP}/api/control?azolla=stop`, { mode: 'no-cors' }).catch(() => {});
+      } catch(e) {}
+      triggerBurstSync();
 
-      if (bRun) bRun.style.display = 'inline-flex';
-      if (bStop) bStop.style.display = 'none';
-      if (cBox) cBox.style.display = 'none';
-
-      showToast(completed ? t('toast_azolla_complete') : t('toast_azolla_stopped'));
+      broadcastState('ACTUATOR_UPDATE', { azollaRunning: false });
     }
 
     function saveAzollaTimers() {
@@ -3706,25 +3936,73 @@
       } catch(e) {}
     }
 
-    // ── ESP32 Hardware Status Polling & Real-Time Sync ───────────────────
+    // ── ESP32 Hardware Status Polling & Minimal Real-Time Sync ──────────
+    let clientStateVersion = 0;
+    let pollTimeout = null;
+    const IDLE_POLL_INTERVAL_MS = 25000;  // 25s steady-state idle cadence (92% reduction)
+    const BURST_POLL_INTERVAL_MS = 1500;  // 1.5s post-command verification burst
+    let burstRemainingCount = 0;
+
+    function scheduleNextPoll(delayMs = IDLE_POLL_INTERVAL_MS) {
+      if (pollTimeout) clearTimeout(pollTimeout);
+      // Page Visibility Lifecycle: Zero network polling when tab is hidden / phone locked
+      if (document.hidden) return;
+      pollTimeout = setTimeout(pollHardwareStatus, delayMs);
+    }
+
+    function triggerBurstSync() {
+      burstRemainingCount = 2; // Schedule 2 quick verification polls
+      scheduleNextPoll(500);
+    }
+
+    // Page Visibility Lifecycle: Immediately freeze when hidden; instant refresh when active
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (pollTimeout) clearTimeout(pollTimeout);
+      } else {
+        pollHardwareStatus();
+      }
+    });
+
     function pollHardwareStatus() {
-      // Fetches http://${espIP}/api/status when ESP32 is deployed
+      if (document.hidden) return;
+      if (pollTimeout) clearTimeout(pollTimeout);
+
       if (window._isLiveESP) {
-        fetch(`http://${espIP}/api/status`, { cache: 'no-store' })
+        const url = `http://${espIP}/api/status?v=${clientStateVersion}`;
+        fetch(url, { cache: 'no-store' })
           .then(res => {
             if (!res.ok) throw new Error('HTTP ' + res.status);
             return res.json();
           })
           .then(data => {
             updateEspStatus(true);
-            applyHardwarePayload(data);
+            // Ultra-minimal differential query: if ESP returned {"v": X}, state hasn't changed
+            if (data.v !== undefined) {
+              if (data.v === clientStateVersion && data.temp === undefined) {
+                // State identical on ESP32, skip redundant DOM operations
+              } else {
+                clientStateVersion = data.v;
+                applyHardwarePayload(data);
+              }
+            } else {
+              applyHardwarePayload(data);
+            }
           })
           .catch(err => {
             updateEspStatus(false);
-            console.warn('ESP32 poll offline fallback');
+          })
+          .finally(() => {
+            if (burstRemainingCount > 0) {
+              burstRemainingCount--;
+              scheduleNextPoll(BURST_POLL_INTERVAL_MS);
+            } else {
+              scheduleNextPoll(IDLE_POLL_INTERVAL_MS);
+            }
           });
       } else {
         updateEspStatus(true);
+        scheduleNextPoll(IDLE_POLL_INTERVAL_MS);
       }
     }
 
@@ -3767,6 +4045,53 @@
         chickHeat = !!data.chickHeat;
         updateChickHeatUI();
       }
+      // Authoritative Real-Time Actuator Status from ESP32
+      if (data.manureActive !== undefined) {
+        manureRunning = !!data.manureActive;
+        if (data.manureRemainingSec !== undefined) manureRemainingSec = data.manureRemainingSec;
+        updateManureUI();
+      }
+      if (data.azollaActive !== undefined) {
+        azollaRunning = !!data.azollaActive;
+        if (data.azollaRemainingSec !== undefined) azollaRemainingSec = data.azollaRemainingSec;
+        updateAzollaUI();
+      }
+      if (data.ringerActive !== undefined) {
+        ringerActive = !!data.ringerActive;
+        if (data.ringerRemainingSec !== undefined) ringerRemainingSec = data.ringerRemainingSec;
+        updateRingerUI();
+      }
+      // Authoritative Ambient Light Sensor Telemetry from ESP32
+      if (data.alsLux !== undefined) {
+        alsLux = data.alsLux;
+        const lblLive = document.getElementById('lbl-live-als');
+        if (lblLive) lblLive.textContent = alsLux + ' lx';
+        const badgeLux = document.getElementById('val-als-lux');
+        if (badgeLux) badgeLux.textContent = alsLux;
+      }
+      if (data.alsTrigger !== undefined) {
+        alsTriggerActive = !!data.alsTrigger;
+        const statusText = document.getElementById('lbl-als-status-text');
+        if (statusText) {
+          if (alsTriggerActive) {
+            statusText.textContent = t('als_status_dark');
+            statusText.style.color = 'var(--terracotta)';
+          } else {
+            statusText.textContent = t('als_status_day');
+            statusText.style.color = 'var(--moss)';
+          }
+        }
+      }
+      if (data.alsEnabled !== undefined) {
+        alsLightEnabled = !!data.alsEnabled;
+        const toggle = document.getElementById('toggle-als-enable');
+        if (toggle) {
+          toggle.classList.toggle('on', alsLightEnabled);
+          toggle.classList.toggle('off', !alsLightEnabled);
+        }
+        const badge = document.getElementById('badge-als-status');
+        if (badge) badge.style.display = (autoMode && featureFlags.lights && alsLightEnabled) ? 'inline-flex' : 'none';
+      }
     }
 
     function markSettingsDirty() {
@@ -3789,6 +4114,12 @@
         statusEl.style.color = '#B45309';
         statusEl.style.background = 'rgba(245, 158, 11, 0.12)';
       }
+
+      // Single atomic configuration batch to ESP32
+      try {
+        fetch(`http://${espIP}/api/control?auto=${autoMode ? 1 : 0}&alsLight=${alsLightEnabled ? 1 : 0}&alsScale=${alsScaleLevel}&alsTarget=${alsTargetZone}&hens=${totalHens}&eggs=${eggsToday}`, { mode: 'no-cors' }).catch(() => {});
+      } catch(e) {}
+      triggerBurstSync();
       
       setTimeout(() => {
         settingsDirty = false;
@@ -3811,6 +4142,103 @@
       lightOutdoorOnTime = document.getElementById('cfg-light-out-on').value;
       lightOutdoorOffTime = document.getElementById('cfg-light-out-off').value;
       markSettingsDirty();
+    }
+
+    // ── Ambient Light Sensor (ALS) Autonomous Trigger ────────────────────
+    function getAlsLuxFromScale(scale) {
+      const s = Math.max(1, Math.min(10, parseInt(scale, 10) || 5));
+      const scaleMap = {
+        1: 120,
+        2: 100,
+        3: 85,
+        4: 70,
+        5: 55,
+        6: 42,
+        7: 32,
+        8: 24,
+        9: 17,
+        10: 10
+      };
+      return scaleMap[s] || 55;
+    }
+
+    function toggleAlsLightTrigger() {
+      alsLightEnabled = !alsLightEnabled;
+      autopilotMatrix.als = alsLightEnabled;
+      const chk = document.getElementById('matrix-auto-als');
+      if (chk) chk.checked = alsLightEnabled;
+      try {
+        localStorage.setItem('coopsense_als_light_enabled', alsLightEnabled);
+        localStorage.setItem('coopsense_autopilot_matrix', JSON.stringify(autopilotMatrix));
+      } catch(e) {}
+      updateAlsUI();
+      evaluateAlsLighting();
+      markSettingsDirty();
+      try {
+        fetch(`http://${espIP}/api/control?alsLight=${alsLightEnabled ? 1 : 0}&alsThresh=${getAlsLuxFromScale(alsScaleLevel)}&alsScale=${alsScaleLevel}&alsTarget=${alsTargetZone}`, { mode: 'no-cors' }).catch(() => {});
+      } catch(e) {}
+      triggerBurstSync();
+    }
+
+    function saveAlsConfig() {
+      const selTarget = document.getElementById('cfg-als-target');
+      if (selTarget) alsTargetZone = selTarget.value;
+      const selThresh = document.getElementById('cfg-als-threshold');
+      if (selThresh) alsScaleLevel = Math.max(1, Math.min(10, parseInt(selThresh.value, 10) || 5));
+      try {
+        localStorage.setItem('coopsense_als_target', alsTargetZone);
+        localStorage.setItem('coopsense_als_scale', alsScaleLevel);
+      } catch(e) {}
+      const lblTarget = document.getElementById('lbl-target-lux');
+      if (lblTarget) lblTarget.textContent = getAlsLuxFromScale(alsScaleLevel) + ' lx';
+      evaluateAlsLighting();
+      markSettingsDirty();
+      try {
+        fetch(`http://${espIP}/api/control?alsThresh=${getAlsLuxFromScale(alsScaleLevel)}&alsScale=${alsScaleLevel}&alsTarget=${alsTargetZone}`, { mode: 'no-cors' }).catch(() => {});
+      } catch(e) {}
+      triggerBurstSync();
+    }
+
+    function updateAlsUI() {
+      const toggle = document.getElementById('toggle-als-enable');
+      if (toggle) {
+        toggle.classList.toggle('on', alsLightEnabled);
+        toggle.classList.toggle('off', !alsLightEnabled);
+      }
+      const panel = document.getElementById('als-config-panel');
+      if (panel) panel.style.display = alsLightEnabled ? 'block' : 'none';
+      const selTarget = document.getElementById('cfg-als-target');
+      if (selTarget) selTarget.value = alsTargetZone;
+      const selThresh = document.getElementById('cfg-als-threshold');
+      if (selThresh) selThresh.value = String(alsScaleLevel);
+      const lblTarget = document.getElementById('lbl-target-lux');
+      if (lblTarget) lblTarget.textContent = getAlsLuxFromScale(alsScaleLevel) + ' lx';
+      const chk = document.getElementById('matrix-auto-als');
+      if (chk) chk.checked = alsLightEnabled;
+      const badge = document.getElementById('badge-als-status');
+      if (badge) badge.style.display = (autoMode && featureFlags.lights && alsLightEnabled) ? 'inline-flex' : 'none';
+    }
+
+    function evaluateAlsLighting() {
+      // All sensor filtering, hysteresis, debouncing, and actuation are calculated exclusively on ESP32
+      const triggerOnLux = getAlsLuxFromScale(alsScaleLevel);
+      const lblTarget = document.getElementById('lbl-target-lux');
+      if (lblTarget) lblTarget.textContent = triggerOnLux + ' lx';
+
+      const isAlsActive = autoMode && featureFlags.lights && alsLightEnabled;
+      const badge = document.getElementById('badge-als-status');
+      if (badge) badge.style.display = isAlsActive ? 'inline-flex' : 'none';
+
+      // Live sensor value and dark/day trigger status are fed directly by ESP32 status telemetry in applyHardwarePayload()
+      if (!window._isLiveESP) {
+        const lblLive = document.getElementById('lbl-live-als');
+        if (lblLive && !lblLive.textContent) lblLive.textContent = '280 lx';
+        const statusText = document.getElementById('lbl-als-status-text');
+        if (statusText && !statusText.textContent) {
+          statusText.textContent = alsTriggerActive ? t('als_status_dark') : t('als_status_day');
+          statusText.style.color = alsTriggerActive ? 'var(--terracotta)' : 'var(--moss)';
+        }
+      }
     }
 
     function changeFlockCount(delta) {
@@ -3916,6 +4344,44 @@
       } else {
         setEggs(0);
       }
+
+      // Load Flock Bell preferences (Scheduled time & duration)
+      const storedBellTime = localStorage.getItem('coopsense_bell_time');
+      if (storedBellTime) bellScheduledTime = storedBellTime;
+      const storedRing = localStorage.getItem('coopsense_ringer_duration_sec');
+      if (storedRing !== null) {
+        ringerDurationSec = parseInt(storedRing, 10) || 12;
+      }
+      const storedBellAuto = localStorage.getItem('coopsense_bell_auto');
+      if (storedBellAuto !== null) {
+        bellAutoEnabled = (storedBellAuto === '1');
+      }
+      const timeInput = document.getElementById('cfg-bell-time');
+      if (timeInput) timeInput.value = bellScheduledTime;
+      const durInput = document.getElementById('cfg-bell-duration');
+      if (durInput) durInput.value = ringerDurationSec;
+      updateRingerUI();
+
+      // Load ALS preferences
+      const storedAlsLight = localStorage.getItem('coopsense_als_light_enabled');
+      if (storedAlsLight !== null) {
+        alsLightEnabled = (storedAlsLight === 'true');
+        autopilotMatrix.als = alsLightEnabled;
+      }
+      const storedAlsTarget = localStorage.getItem('coopsense_als_target');
+      if (storedAlsTarget) alsTargetZone = storedAlsTarget;
+      const storedAlsScale = localStorage.getItem('coopsense_als_scale') || localStorage.getItem('coopsense_als_thresh');
+      if (storedAlsScale) {
+        const parsed = parseInt(storedAlsScale, 10);
+        if (parsed > 10) {
+          if (parsed <= 30) alsScaleLevel = 8;
+          else if (parsed <= 60) alsScaleLevel = 5;
+          else alsScaleLevel = 2;
+        } else if (parsed >= 1 && parsed <= 10) {
+          alsScaleLevel = parsed;
+        }
+      }
+      updateAlsUI();
     } catch(e) {}
 
     try {
@@ -3936,6 +4402,9 @@
     try { updateFanUI(); } catch(e) { console.error('Fan UI error:', e); }
     try { updateChickHeatUI(); } catch(e) { console.error('Chick heat UI error:', e); }
     try { updateLightPill('in1', lightIndoor1); updateLightPill('in2', lightIndoor2); updateLightPill('out', lightOutdoor); } catch(e) {}
+    try { updateManureUI(); } catch(e) {}
+    try { updateAzollaUI(); } catch(e) {}
+    try { updateRingerUI(); } catch(e) {}
     try { recalculateLayRate(); } catch(e) { console.error('Lay rate error:', e); }
 
     // Periodic telemetry jitter simulation for offline standalone preview
@@ -3970,12 +4439,26 @@
         const minDeg = now.getMinutes() * 6;
         mHand.style.transform = `translateX(-50%) rotate(${minDeg}deg)`;
       }
+
+      // Autopilot scheduled bell ringing
+      if (now.getSeconds() === 0 && autoMode && featureFlags.bell && autopilotMatrix.bell && !ringerActive) {
+        const timeInput = document.getElementById('cfg-bell-time');
+        const schedTime = (timeInput && timeInput.value) ? timeInput.value : bellScheduledTime;
+        if (schedTime) {
+          const parts = schedTime.split(':');
+          const schedH = parseInt(parts[0], 10);
+          const schedM = parseInt(parts[1], 10);
+          if (now.getHours() === schedH && now.getMinutes() === schedM) {
+            triggerRecallBell(ringerDurationSec);
+          }
+        }
+      }
     }
     setInterval(updateHeroClock, 1000);
     updateHeroClock();
 
-    // Hardware sync loop
-    setInterval(pollHardwareStatus, 2000);
+    // Hardware sync loop: adaptive multi-rate polling with visibility lifecycle
+    pollHardwareStatus();
 
     // ── Progressive Web App (PWA) Service Worker Registration ───────────
     if ('serviceWorker' in navigator) {
